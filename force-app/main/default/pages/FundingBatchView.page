@@ -1,0 +1,101 @@
+<apex:page standardController="Funding_Batch__c" extensions="FundingBatchController" action="{!reCalculate}" sidebar="false">
+    <script>
+    
+    function releaseFundJS(){
+        var r = confirm("Click OK to release the batch");
+        if (r == true) {
+            releaseFundBatch();
+        }
+    }
+    function selectAllJS(){
+        //alert('Hi!!!!');
+        selectAllProduct();
+    }
+    </script>
+    
+    <apex:form >
+        <apex:pageMessages ></apex:pageMessages>
+        <apex:actionFunction name="releaseFundBatch" action="{!releaseFund}" />
+        <apex:actionFunction name="selectAllProduct" action="{!selectAll}" reRender="pbprodlist"/>
+        <apex:outputPanel >
+        <apex:pageBlock id="pbprodlist">
+            <apex:inputCheckbox value="{!selectAll}" onchange="selectAllJS();"/>Select / DeSelect All
+            <apex:pageBlockTable value="{!productWrapperGroup}" var="p" id="pbtableGroup">
+                <apex:column >
+                    <apex:pageBlockTable value="{!p.productList}" var="v" columnsWidth="20px, 150px, 200px, 100px, 100px, 100px, 100px, 100px, 100px">
+                        <apex:column rendered="{!readableCheck}">
+                            <apex:facet name="header"> 
+                                <apex:outputLabel >Select</apex:outputLabel>
+                            </apex:facet>
+                            <apex:inputCheckbox value="{!v.check}"/>
+                        </apex:column>
+                        <apex:column headerValue="Name">
+                            <apex:outputLink value="/{!v.product.id}">{!v.product.name}</apex:outputLink>
+                        </apex:column>
+                        <apex:column headerValue="Customer Name">
+                            <apex:outputLink value="/{!v.product.customer__r.id}">{!v.product.customer__r.name}</apex:outputLink>
+                            <apex:facet name="footer">Subtotal for {!p.groupDate}</apex:facet>
+                        </apex:column>
+                        <apex:column value="{!v.product.Disbursement_Amount__c}">
+                            <apex:facet name="footer">
+                                <apex:outputText value="${0,number,###,##0.00}" >
+                                    <apex:param value="{!p.totalFundingAmount}"/>
+                                </apex:outputText>
+                            </apex:facet>
+                        </apex:column>
+                        <apex:column value="{!v.product.Loan_Process_Type__c}"/>
+                        <apex:column value="{!v.product.Funding_Type__c}"/>
+                        <apex:column value="{!v.product.Product_Status__c}"/>
+                        <apex:column value="{!v.product.Funding_Status__c}"/>
+                        <apex:column value="{!v.product.Funding_Date__c}"/>
+                    </apex:pageBlockTable>
+                </apex:column>
+            </apex:pageBlockTable>
+            <apex:pageBlockSection >
+                <apex:pageBlockSectionItem >
+                    <apex:outputText >No of Accounts Selected:</apex:outputText>
+                    <apex:outputText >{!noOfAccountsSelected}</apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText >Total Automated Funding Amount:</apex:outputText>
+                    <apex:outputText value="${0,number,###,##0.00}" >
+                        <apex:param value="{!totalAutomatedFundingAmount}"/>
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText >Total Manual Funding Amount:</apex:outputText>
+                    <apex:outputText value="${0,number,###,##0.00}" >
+                        <apex:param value="{!totalManualFundingAmount}"/>
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel ></apex:outputLabel>
+                    <apex:commandButton action="{!reCalculate}" value="Recalculate" rendered="{!readableCheck}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText >Batch Funding Status:</apex:outputText>
+                    <apex:outputText >{!batchFundingStatus}</apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText >Fund Release Date:</apex:outputText>
+                    <apex:outputText >{!fundReleaseDate}</apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText >Bank Confirmation Number:</apex:outputText>
+                    <apex:outputText >{!bankConfirmationNumber}</apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel ></apex:outputLabel>
+                    <apex:commandButton onclick="releaseFundJS();return false;" value="Release Fund" rendered="{!readableCheck && (totalManualFundingAmount+totalAutomatedFundingAmount >0) && contains($Setup.Loan_ReEngineering__c.Funding_Batch_Approver__c, $Profile.Name)}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        </apex:outputPanel>
+    </apex:form>
+</apex:page>

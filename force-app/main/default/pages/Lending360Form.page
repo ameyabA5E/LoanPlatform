@@ -1,0 +1,1744 @@
+<apex:page showHeader="false" sidebar="false"
+    controller="Lending360Controller" docType="html-5.0"
+    applyBodyTag="false" applyHtmlTag="false">
+    <html>
+<head>
+<meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1" />
+<apex:includeScript value="{!$Resource.jQuery}" />
+<apex:includeScript value="{!URLFOR($Resource.jQueryUI, 'jquery-ui.min.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.ApplicationResource, 'js/traction/application.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.ApplicationResource, 'js/traction/validation.js')}" />
+<apex:stylesheet value="{!URLFOR($Resource.jQueryUI, 'jquery-ui.min.css')}" />
+<apex:stylesheet value="{!URLFOR($Resource.ApplicationResource, 'css/traction/application.css')}" />
+
+<Style>
+    .warningBox{
+    text-align: center; 
+    border-style: solid; 
+    border-width: 4px; 
+    border-radius: 10px; 
+    border-color: purple; 
+    margin:10px 12.5% 20px 12.5%; 
+    padding: 10px 0 10px 0px; 
+    font-weight:700; 
+    font-size:16px; 
+    font-family: inherit;
+    
+    }
+    
+     @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {  
+    /* IE10+ specific styles go here */  
+        .warningBox {
+      margin:10px 10% 20px 15%;
+      }
+}
+</Style>
+<script type="text/javascript">
+            var previousAddressSectionIsRequired = false;
+            var previousEmployerSectionIsRequired = false;
+            var topOrigin = '{!JSENCODE(AppFormSettings.Parent_Page_Domain__c)}';
+
+           /* $(document).ready( function () {
+                // Toggle code entry fields if "offer code avail" answer changes                   
+                $("input[id*='offerCodeAvailRadio']").change( function() {
+                    $("#offerCodeEntry").toggle();
+                    adjustHeight();
+                });*/
+                
+              //Updated by A5E Consulting 
+              // Toggle Offer Code field if "Yes" answer changes 
+              $(document).ready( function () {
+              
+                // Toggle code entry fields if "offer code avail" answer changes                   
+                $("input[id*='offerCodeAvailRadio']").change( function() {
+                    var offerCodeValue= $("[id*='offerCodeAvailRadio']:checked");
+                    if (offerCodeValue.val() == "Yes") {
+                        $("#offerCodeEntry").show();
+                    }else{
+                        $("#offerCodeEntry").hide();
+                    }
+                    adjustHeight();
+                }); 
+                
+                // Toggle Home Owner Question
+                $("input[id*='loanTypeField']").change( function() {
+
+                    var loanTypeFieldObj = $("[id*='loanTypeField']:checked");   
+                    if (loanTypeFieldObj != undefined && loanTypeFieldObj.val() == "Lending360 Credit Card") {
+                        $("#homeOwnerQuestion").show();
+                                                
+                        var homeOwnerFieldObj = $("[id*='homeOwnerField']:checked");   
+                        if (homeOwnerFieldObj != undefined && homeOwnerFieldObj.val() == "Yes") {
+                            $("#rentQuestion").hide();
+                            $("#mortgageQuestion").show();
+                            $("#mortgageWithQuestion").show();
+                            $("#pRentOrOwnFieldDiv").hide();                        
+                            
+                        } else if (homeOwnerFieldObj != undefined && homeOwnerFieldObj.val() == "No"){
+                            $("#mortgageQuestion").hide();
+                            $("#mortgageWithQuestion").hide();
+                            $("#rentQuestion").show();   
+                            $("#pRentOrOwnFieldDiv").hide();
+                                                  
+                        } else{
+                            $("#rentQuestion").show();
+                            $("#mortgageQuestion").hide();
+                            $("#mortgageWithQuestion").hide();
+                            $("#pRentOrOwnFieldDiv").show();
+                        }
+                        
+                    } else {
+                        $("#homeOwnerQuestion").hide(); 
+                        $("#pRentOrOwnFieldDiv").show()
+                        var permanentRentOrOwnObj = $("[id*='permanentRentOrOwnField']:checked"); 
+                          
+                        if (permanentRentOrOwnObj != undefined && permanentRentOrOwnObj.val() == "Own Property") {
+                            $("#rentQuestion").hide();
+                            $("#mortgageQuestion").show();
+                            $("#mortgageWithQuestion").show();
+                        } 
+                        else if (permanentRentOrOwnObj != undefined && permanentRentOrOwnObj.val() == "Rent") {
+                            $("#mortgageQuestion").hide();
+                            $("#mortgageWithQuestion").hide();
+                            $("#rentQuestion").show();
+                        }    
+                        else{
+                            $("#mortgageQuestion").hide();
+                            $("#mortgageWithQuestion").hide();
+                            $("#rentQuestion").show();                      
+                        }                            
+                    }
+                    adjustHeight();
+                }); 
+
+                // Initialize correct state for Home Owner Question
+                var homeOwnerFieldObj = $("[id*='homeOwnerField']:checked");   
+                $("input[id*='homeOwnerField']").trigger("change");             
+
+                // Toggle Home Owner Question
+                $("input[id*='homeOwnerField']").change( function() {
+
+                    var homeOwnerFieldObj = $("[id*='homeOwnerField']:checked");   
+                    if (homeOwnerFieldObj != undefined && homeOwnerFieldObj.val() == "Yes") {
+                        $("#rentQuestion").hide();
+                        $("#mortgageQuestion").show();
+                        $("#mortgageWithQuestion").show();
+                        $("#pRentOrOwnFieldDiv").hide();                        
+                        
+                    } else if (homeOwnerFieldObj != undefined && homeOwnerFieldObj.val() == "No"){
+                        $("#mortgageQuestion").hide();
+                        $("#mortgageWithQuestion").hide();
+                        $("#rentQuestion").show();   
+                        $("#pRentOrOwnFieldDiv").hide();
+                                              
+                    } else{
+                        $("#rentQuestion").show();
+                        $("#mortgageQuestion").hide();
+                        $("#mortgageWithQuestion").hide();
+                        $("#pRentOrOwnFieldDiv").show();
+                    }
+                    adjustHeight();
+                }); 
+                
+                // Initialize correct state for "how much is monthly rent/mortgage" question
+                var permanentRentOrOwnObj = $("[id*='permanentRentOrOwnField']:checked");   
+                $("input[id*='permanentRentOrOwnField']").trigger("change");
+                
+                // Toggle rent and mortgage fields if "rent or own" answer changes                
+                $("input[id*='permanentRentOrOwnField']").change( function() {
+                    var permanentRentOrOwnObj = $("[id*='permanentRentOrOwnField']:checked");   
+                    if (permanentRentOrOwnObj != undefined && permanentRentOrOwnObj.val() == "Own Property") {
+                        $("#rentQuestion").hide();
+                        $("#mortgageQuestion").show();
+                        $("#mortgageWithQuestion").show();
+                    } 
+                    else if (permanentRentOrOwnObj != undefined && permanentRentOrOwnObj.val() == "Rent") {
+                        $("#mortgageQuestion").hide();
+                        $("#mortgageWithQuestion").hide();
+                        $("#rentQuestion").show();
+                    }
+                    adjustHeight();
+                });
+                
+                /*
+                $("input[id*='permanentRentOrOwnField']").each( function() {
+                    var permanentRentOrOwnObj = $("[id*='permanentRentOrOwnField']:checked");   
+                    if (permanentRentOrOwnObj != undefined && permanentRentOrOwnObj.val() == "Own Property") {
+                        $("#rentQuestion").hide();
+                        $("#mortgageQuestion").show();
+                        $("#mortgageWithQuestion").show();
+                    } else if (permanentRentOrOwnObj != undefined && permanentRentOrOwnObj.val() == "Rent") {
+                        $("#mortgageQuestion").hide();
+                        $("#mortgageWithQuestion").hide();
+                        $("#rentQuestion").show();
+                    }
+                    adjustHeight();
+                });
+                */
+                                                
+                //Updated by A5E Consulting
+                // Initialize correct state for "Do you have Offer Code" question
+                var offerCodeValue= $("[id*='offerCodeAvailRadio']:checked");   
+                $("input[id*='offerCodeAvailRadio']").trigger("change");
+
+                // Toggle political related fields if "politically exposed" answer changes
+                $("input[id*='politicallyExposedForeignPersonField']").change( function() {
+                    $("#whoHeld").toggle();
+                    $("#whenHeld").toggle();
+                    $("#whereHeld").toggle();
+                    adjustHeight();
+                });
+
+                // Toggle third party fields if "third party direction" answer changes
+                $("input[id*='thirdPartyDirectionField']").change( function() {
+                    $("#whoWillDirect").toggle();
+                    $("#relationshipToApp").toggle();
+                    adjustHeight();
+                });
+                
+                // Bind field's onchange event to previous address check
+                // Toggle Previous Employer section based on years worked at current employer
+                $("input[id*='yearsAtPermanentAddressField']").change( function() {
+                    var yearsAtPermanentAddress= $("input[id*='yearsAtPermanentAddressField']").val();
+                    if (isInt(yearsAtPermanentAddress) && yearsAtPermanentAddress < 2) {
+                        $("#previousAddressSection").show();
+                        previousAddressSectionIsRequired = true;
+                    } else {
+                        $("#previousAddressSection").hide();
+                        previousAddressSectionIsRequired = false;
+                    }
+                    adjustHeight();
+                });
+
+                // Initialize correct state
+                $("input[id*='yearsAtPermanentAddressField']").trigger("change");
+
+                // Bind field's onchange event to previous employer check
+                // Toggle Previous Address section based on years lived at current address
+                $("input[id*='yearsAtEmployerField']").change( function() {
+                    var yearsAtEmployer = $("input[id*='yearsAtEmployerField']").val();
+                    if (isInt(yearsAtEmployer) && yearsAtEmployer < 2) {
+                        $("#previousEmployerSection").show();
+                        previousEmployerSectionIsRequired = true;
+                    } else {
+                        $("#previousEmployerSection").hide();
+                        previousEmployerSectionIsRequired = false;
+                    }
+                    adjustHeight();
+                });
+
+                // Call at beginning to initialize correct state
+                $("input[id*='yearsAtEmployerField']").trigger("change");
+
+                // Set initial height
+                adjustHeight();
+                
+                // Google Analytics initial page hit
+                pushHit('/application-form/step0', 'Application Form Step 0');
+            });
+        </script>
+</head>
+<body>
+    <!-- Google Tag Manager -->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-W6F9RX"
+            height="0" width="0" style="display: none; visibility: hidden"></iframe>
+    </noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-W6F9RX');</script>
+    <!-- End Google Tag Manager -->
+    <apex:form >
+        <div id="topOfSteps" style="">
+            <apex:actionRegion >
+                <div id="stepZero">
+                    <div class="appForm infoBlock">
+                        <div class="welcomeSalutation">
+                            <h4>Welcome to Lending360!</h4>
+                        </div>
+                        <p>The application should take only 5-10 minutes to complete,
+                            and you'll receive a response in as little as 30 seconds.</p>
+                        <apex:pageMessages id="stepZeroPageMessages" />
+                        <div>
+                            <table id="szTbl">
+                                <tr>
+                                    <th width="50%" style="text-align: center;">What do I
+                                        need?</th>
+                                    <th width="50%" style="text-align: center;">What else
+                                        should I know?</th>
+                                </tr>
+                                <tr>
+                                    <td>To complete this application you will need:
+                                        <ul>
+                                            <li>Employment and Income Information</li>
+                                            <li>Monthly expenses such home loan or rental payments</li>
+                                        </ul>
+                                    </td>
+                                    <td>Once your application is approved, we do require to
+                                        ask a few personal questions based on your credit history.
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div>
+                            <table id="ltTbl">
+                                <td>Would you like to apply for:</td>
+                                <td><apex:selectRadio id="loanTypeField"
+                                        value="{!SelLoanType}">
+                                        <apex:selectOptions value="{!LoanTypeOptions}" />
+                                    </apex:selectRadio>
+                                    <div id="loanTypeErrMsg" class="invalidFieldMsg hidden">Please
+                                        select a Loan Type.</div></td>
+                            </table>
+                            
+                            <div id="homeOwnerQuestion" class="hidden">
+                                <table id="hoTbl">
+                                    <td><span style="color: red">*</span>Are you a Home Owner?</td>
+                                    <td>
+                                        <apex:selectRadio id="homeOwnerField" value="{!selHomeOwnerOptions}"> 
+                                            <apex:selectOptions value="{!homeOwnerOptions}" />
+                                        </apex:selectRadio>
+                                        <div id="homeOwnerErrMsg" class="invalidFieldMsg hidden">
+                                           Please specify if you are a Home Owner.
+                                        </div>
+                                    </td>
+                                </table>    
+                            </div> 
+                            
+                            <table id="prncTbl">
+                                <td><span style="color: red">*</span>State:</td>
+                                <td>
+                                    <apex:selectList id="provinceField" value="{!SelState}" size="1">
+                                        <apex:selectOptions value="{!StateOptions}" />
+                                    </apex:selectList>
+                                    
+                                    <div id="provinceErrMsg" class="invalidFieldMsg hidden">
+                                        Please select a State.
+                                    </div>                                  
+                                </td>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="clearboth">&nbsp;</div>
+                    
+                    <div class="clearboth">&nbsp;</div>
+                    <div class="submitBtn fleft">
+                        <input type="submit" id="stepZeroContinue" value="CONTINUE"
+                            onclick="validateStepZero(); return false;" />
+                        <apex:actionFunction action="{!saveStepZero}" name="saveStepZero"
+                            oncomplete="checkStepZeroResponseAndTransition()"
+                            rerender="stepZeroPageMessages,discl,prelimInfo" />
+                    </div>
+                    <div id="stepZeroLoading" class="loadingSpinner fleft">
+                        <apex:image url="{!$Resource.loadingGif}"
+                            style="vertical-align:middle;" />
+                    </div>
+                    <div class="clearboth">&nbsp;</div>
+                </div>
+            </apex:actionRegion>
+            <div class="sectionHeader">
+                <h3>&nbsp;&nbsp;&nbsp;1. Pre-qualification</h3>
+            </div>
+            <apex:actionRegion >
+                <div id="stepOne" class="hidden">
+                    <apex:outputPanel layout="block" id="discl" styleClass="infoBlock">
+                        <p style="margin-top: 15px;">Before proceeding, please
+                            complete our Pre-Qualification. It involves providing some basic
+                            information to confirm you are eligible to apply for credit, as
+                            well as reading and accepting the terms listed.</p>
+                        <apex:outputPanel layout="block">
+                            <div>To be eligible for an Leanding360, you  need to be:</div>
+                           <ul>
+                                <li>Condition1</li>
+                                <li>Condition2</li>
+                                <li>Condition3</li>
+                            </ul>
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel layout="block" >
+                            <div class="embeddedStmt">
+                                <h2>
+                                    Disclosure Statement
+                                </h2>
+                                <table id="cc_disclosure" class="responsive">
+                                    <tbody>
+                                        <tr>
+                                            <th>Terms and Conditions 1</th>
+                                            <td>
+                                                <p>
+                                                    Terms and Conditions 1 details
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Terms and Conditions 2</th>
+                                            <td>
+                                                <p>
+                                                    Terms and Conditions 2 details
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Terms and Conditions 3</th>
+                                            <td>
+                                                <p>
+                                                    Terms and Conditions 3 details
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Terms and Conditions 4</th>
+                                            <td>
+                                                <p>
+                                                    Terms and Conditions 4 details
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="hasAcceptedDisclosureTermsContainer">
+                                <apex:inputCheckbox id="cchasAcceptedDisclosureTermsField"
+                                    value="{!Application.Has_Accepted_Disclosure_Terms__c}" />
+                                <label id="hasAcceptedDisclosureTermsLabel">I Accept the
+                                    Terms Listed</label>
+                            </div>
+
+                            <div id="hasAcceptedDisclosureTermsErrMsg"
+                                class="invalidFieldMsg hidden">Please accept the terms to
+                                proceed.</div>
+                            <div style="clear: both">&nbsp;</div>
+                        </apex:outputPanel>
+                        
+                    </apex:outputPanel>  
+                    
+                     
+                    
+                    <div class="appForm">
+                        <apex:outputPanel id="prelimInfo" styleClass="appFormBlock infoBlock">
+                            
+                            <div style="margin-top: 10px;">There are only a few basic
+                                questions, and it shouldn’t take more than a couple of minutes
+                                of your time. After you’ve answered, click on CONTINUE and we’ll
+                                know instantly if you qualify to move forward with the actual
+                                credit application.</div>
+                            <div class="asterisk">*required information</div>
+                            <br />
+                        </apex:outputPanel>
+                        <apex:pageMessages id="stepOnePageMessages" />
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What's Your Name?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectList id="salutationField" required="true"
+                                        value="{!SelSalutation}" size="1">
+                                        <apex:selectOptions value="{!SalutationOptions}" />
+                                    </apex:selectList>
+                                </div>
+                                <div id="salutationErrMsg" class="invalidFieldMsg hidden">Please
+                                    select a salutation.</div>
+                                <div>
+                                    <apex:inputText id="firstNameField" value="{!FirstName}"
+                                        html-placeholder="{!PlaceholderFirstName}" />
+                                </div>
+                                <div id="firstNameErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide your first name.</div>
+                                <div>
+                                    <apex:inputText id="middleNameField" value="{!MiddleName}"
+                                        html-placeholder="{!PlaceholderMiddleName}" />
+                                </div>
+                                <div>
+                                    <apex:inputText id="lastNameField" value="{!LastName}"
+                                        html-placeholder="{!PlaceholderLastName}" />
+                                </div>
+                                <div id="lastNameErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide your last name.</div>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <h2>State</h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:selectList id="provinceField" value="{!SelProvince}"
+                                    size="1">
+                                    <apex:selectOptions value="{!ProvinceOptions}" />
+                                </apex:selectList>
+                                <div id="provinceErrMsg" class="invalidFieldMsg hidden">Please
+                                    select a State.</div>
+                            </div>
+                        </div>
+                        -->
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Date of Birth</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <!--                            <div>
+                                <apex:inputField id="personBirthdateField" value="{!PersonAccount.PersonBirthdate}"/>
+                                </div>
+-->
+                                <div class="fleft">
+                                    <apex:inputText id="birthdateYearField"
+                                        style="width:52px; margin-right:10px;" maxlength="4"
+                                        value="{!BirthdateYear}"
+                                        html-placeholder="{!PlaceholderBirthdateYear}" />
+                                </div>
+                                <div class="fleft">
+                                    <apex:inputText id="birthdateMonthField"
+                                        style="width:38px; margin-right:10px;" maxlength="2"
+                                        value="{!BirthdateMonth}"
+                                        html-placeholder="{!PlaceholderBirthdateMonth}" />
+                                </div>
+                                <div class="fleft">
+                                    <apex:inputText id="birthdateDayField" style="width:38px;"
+                                        maxlength="2" value="{!BirthdateDay}"
+                                        html-placeholder="{!PlaceholderBirthdateDay}" />
+                                </div>
+                                <div id="birthdateErrMsg"
+                                    class="clearboth invalidFieldMsg hidden">Please provide a valid date of birth.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Aadhaar Card number (optional)</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputText id="sinField" value="{!Application.SIN__c}" />
+                                </div>
+                                <div id="sinErrMsg" class="invalidFieldMsg hidden">Please provide a valid Adhar number.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What is your email address?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputField id="emailAddressField"
+                                        value="{!Application.Email_Address__c}" />
+                                </div>
+                                <div id="emailAddressErrMsg" class="invalidFieldMsg hidden">Please provide a valid email address.</div>
+                            </div>
+
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What is your employment status?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputField id="employmentStatusField"
+                                        value="{!Application.Employment_Status__c}" />
+                                </div>
+                                <div id="employmentStatusErrMsg" class="invalidFieldMsg hidden">Please
+                                    select your employment status.</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Are you currently or have you been in a bankruptcy or
+                                        consumer proposal process within the last 7 years?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectRadio id="currentBKCPField"
+                                        value="{!SelCurrentBKCP}">
+                                        <apex:selectOptions value="{!CurrentBKCPOptions}" />
+                                    </apex:selectRadio>
+                                </div>
+                                <div id="currentBKCPErrMsg" class="invalidFieldMsg hidden">Please
+                                    select 'Yes' or 'No'.</div>
+                            </div>
+                        </div>
+                        -->
+                         
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>How much would you want to borrow?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputField id="requestedCreditLimitField"
+                                        value="{!Application.Requested_Credit_Limit__c}" />
+                                </div>
+                                <div id="requestedCreditLimitErrMsg"
+                                    class="invalidFieldMsg hidden">Please provide the amount
+                                    you would like to borrow.</div>
+                            </div>
+                        </div>
+                        
+                        <!--  
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Do you have an offer code?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectRadio id="offerCodeAvailRadio"
+                                        value="{!SelOfferCodeAvail}">
+                                        <apex:selectOptions value="{!OfferCodeAvailOptions}" />
+                                    </apex:selectRadio>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="offerCodeEntry" class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Offer Code</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputField value="{!Application.Offer_Code__c}" />
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                        
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Do you authorize Lending360 to run a credit
+                                        check on you?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:selectRadio id="authorizedCreditCheckField"
+                                    required="true" value="{!SelAuthorizedCreditCheck}">
+                                    <apex:selectOptions value="{!AuthorizedCreditCheckOptions}" />
+                                </apex:selectRadio>
+                                <div id="authorizedCreditCheckErrMsg"
+                                    class="invalidFieldMsg hidden">To proceed, Lending360 must be
+                                    authorized to run a credit check.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submitBtn fleft">
+                        <input type="submit" id="stepOneContinue" value="CONTINUE"
+                            onclick="validateStepOne(); return false;" />
+                        <apex:actionFunction action="{!saveStepOne}" name="saveStepOne"
+                            oncomplete="checkStepOneResponseAndTransition()"
+                            rerender="stepOnePageMessages" />
+                    </div>
+                    <div class="backBtn fleft">
+                        <input type="submit" id="stepOneBack" value="BACK"
+                            onclick="afStepOneBack(); return false;" />
+                    </div>
+                    <div id="stepOneLoading" class="loadingSpinner fleft">
+                        <apex:image url="{!$Resource.loadingGif}"
+                            style="vertical-align:middle;" />
+                    </div>
+                    <div class="clearboth">&nbsp;</div>
+                </div>
+            </apex:actionRegion>
+
+            <div class="sectionHeader">
+                <h3>&nbsp;&nbsp;&nbsp;2. Tell us about yourself</h3>
+            </div>
+            <apex:actionRegion >
+                <div id="stepTwo" class="hidden">
+                    <div class="appForm">
+                        <apex:pageMessages id="stepTwoPageMessages" />
+                        <div class="appFormBlock">
+                            <div class="info">Contact Info</div>
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Gender</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectList id="genderField" value="{!SelGender}" size="1">
+                                        <apex:selectOptions value="{!GenderOptions}" />
+                                    </apex:selectList>
+                                </div>
+                                <div id="genderErrMsg" class="invalidFieldMsg hidden">
+                                    Please provide your gender.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Home Phone</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputField id="homePhoneField"
+                                        value="{!Application.Home_Phone__c}" />
+                                </div>
+                                <div id="homePhoneErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide a valid phone number.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Mobile/Cell Phone</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputField id="cellPhoneField"
+                                        value="{!Application.Cell_Phone__c}" />
+                                </div>
+                                <div id="cellPhoneErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide a valid phone number.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Work Phone</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputField id="workPhoneField"
+                                        value="{!Application.Work_Phone__c}" />
+                                </div>
+                                <div id="workPhoneErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide a valid phone number.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Communications Preference</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectList value="{!SelCommunicationsPreference}"
+                                        size="1">
+                                        <apex:selectOptions value="{!CommunicationsPreferenceOptions}" />
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>How did you hear about us?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectList value="{!SelHowHeardAboutUs}" size="1">
+                                        <apex:selectOptions value="{!HowHeardAboutUsOptions}" />
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!--
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Referral ID</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectList id="referralIdField" value="{!SelReferralId}"
+                                        size="1">
+                                        <apex:selectOptions value="{!ReferralIdOptions}" />
+                                    </apex:selectList>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                        
+                        <!--
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Name of Person referring you to Lending 360</h2>
+                                </div>
+                                <p style="margin-top: 4px;">(Enter OSB Number here, if you
+                                    have one)</p>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:inputText value="{!Application.Referral_Name__c}" />
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Number of Dependants</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectList id="numberOfDependantsField"
+                                        value="{!SelNumberOfDependants}" size="1">
+                                        <apex:selectOptions value="{!NumberOfDependantsOptions}" />
+                                    </apex:selectList>
+                                </div>
+                                <div id="numberOfDependantsErrMsg"
+                                    class="invalidFieldMsg hidden">Please select your number
+                                    of dependants.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Marital Status</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectList id="maritalStatusField"
+                                        value="{!SelMaritalStatus}" size="1">
+                                        <apex:selectOptions value="{!MaritalStatusOptions}" />
+                                    </apex:selectList>
+                                </div>
+                                <div id="maritalStatusErrMsg" class="invalidFieldMsg hidden">Please select your marital status.</div>
+                            </div>
+                        </div>
+                        <div class="info">Primary Address</div>
+                        <!--  
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>PO Box </h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="permanentAddressPOBox" value="{!Application.Permanent_Address_PO_Box__c}" />                                
+                            </div>
+                        </div>
+                        -->
+                        
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Address 1</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="permanentAddressStreetNumberField"
+                                    value="{!Application.Permanent_Address_Street_Number__c}" />
+                                <div id="permanentAddressStreetNumberErrMsg"
+                                    class="invalidFieldMsg hidden">Please provide Address 1
+                                </div>
+                            </div>
+                        </div>                      
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Address 2 </h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="permanentAddressStreetNameField"
+                                    value="{!Application.Permanent_Address_Street_Name__c}" />
+                                <div id="permanentAddressStreetNameErrMsg"
+                                    class="invalidFieldMsg hidden">Please provide Address 2
+                                </div>
+                            </div>
+                        </div>
+                        <!--  
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Unit Number</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.Permanent_Address_Unit_Number__c}" />
+                            </div>
+                        </div>
+                        -->
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>City</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="permanentAddressCityField"
+                                    value="{!Application.Permanent_Address_City__c}" />
+                                <div id="permanentAddressCityErrMsg" class="invalidFieldMsg hidden">
+                                    Please provide city
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <h2>State</h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:selectList id="permanentProvinceField"
+                                    value="{!SelPermanentState}" size="1">
+                                    <apex:selectOptions value="{!PermanentStateOptions}" />
+                                </apex:selectList>
+                                <div id="permanentProvinceErrMsg" class="invalidFieldMsg hidden">
+                                    Please select state
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Postal Code</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="permanentAddressPostalCodeField"
+                                    value="{!Application.Permanent_Address_PostalCode__c}" />
+                                <div id="permanentAddressPostalCodeErrMsg"
+                                    class="invalidFieldMsg hidden">Please provide a valid postal code.</div>
+                                <div id="permanentAddressPostalCodeProvinceErrMsg"      
+                                    class="invalidFieldMsg hidden">Postal Code does not match selected State.</div> 
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>How long have you lived at this address?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div class="fleft">
+                                    <p>Years</p>
+                                    <apex:inputText id="yearsAtPermanentAddressField"
+                                        style="width:100px; margin-right:2px;"
+                                        value="{!Application.Years_At_Permanent_Address__c}" maxlength="2"/>
+                                </div>
+                                <div class="fleft">
+                                    <p>Months</p>
+                                    <apex:inputText id="monthsAtPermanentAddressField"
+                                        style="width:100px;"
+                                        value="{!Application.Months_At_Permanent_Address__c}" maxlength="2"/>
+                                </div>
+                                <div id="howLongAtPermanentAddressErrMsg"
+                                    class="clearboth invalidFieldMsg hidden">Please specify
+                                    how long you have lived at this address (month must be between
+                                    0 and 11).</div>
+                            </div>
+                        </div>
+                        
+                        <div class="appFormBlock" id="pRentOrOwnFieldDiv">
+                            <div class="appFormBlockLeft">
+                                <h2>Do you rent or own your home?</h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            
+                            <div class="appFormBlockRight">
+                                <apex:selectRadio id="permanentRentOrOwnField" 
+                                    value="{!SelPermanentRentOrOwn}">
+                                    <apex:SelectOptions value="{!PermanentRentOrOwnOptions}" />
+                                </apex:selectRadio>
+                                                                
+                                <div id="permanentRentOrOwnErrMsg" class="invalidFieldMsg hidden">
+                                    Please specify if you rent or own.
+                                </div>
+                                
+                                <!--
+                                <div id="ownErrMsg" class="invalidFieldMsg hidden">
+                                    You can choose only Own Property.
+                                </div>
+                                <div id="rentErrMsg" class="invalidFieldMsg hidden">
+                                    You can choose only Rent.
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div id="rentQuestion" class="appFormBlockLeft">
+                                <h2>How much is your monthly rent payment?</h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            <div id="mortgageQuestion" class="appFormBlockLeft hidden">
+                                <h2>How much is your monthly Home Loan EMI?</h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="housingCostsField"
+                                    value="{!Application.Housing_Costs__c}" />
+                                <div id="housingCostsErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide your monthly payment amount.</div>
+                            </div>
+                        </div>
+                        
+                        <div id="mortgageWithQuestion" class="appFormBlock hidden">
+                            <div id="homeMortgageQuestion" class="appFormBlockLeft">
+                                <h2>Who is your Home Loan with?</h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="homeMortgageWithField"
+                                    value="{!Application.Mortgage_With__c}" />
+                                <div id="homeMortgageWithErrMsg" class="invalidFieldMsg hidden">
+                                    Please specify the lender
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <h2>
+                                    What is the total of your other monthly expenses?
+                                </h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="monthlyExpensesField"
+                                    value="{!Application.Monthly_Expenses__c}" />
+                                <div id="monthlyExpensesErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide your total monthly expenses.</div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div id="previousAddressSection" class="hidden">
+                            <div class="info">Previous Address</div>
+                            <!--  
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>PO Box (GD if applicable)</h2>                                        
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousAddressPOBox" value="{!Application.Previous_Address_PO_Box__c}" />                                    
+                                </div>
+                            </div>
+                            -->
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Address 1</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousAddressStreetNumberField"
+                                        value="{!Application.Previous_Address_Street_Number__c}" />
+                                    <div id="previousAddressStreetNumberErrMsg" class="invalidFieldMsg hidden">
+                                        Please provide Address 1
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Address 2</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousAddressStreetNameField"
+                                        value="{!Application.Previous_Address_Street_Name__c}" />
+                                    <div id="previousAddressStreetNameErrMsg" class="invalidFieldMsg hidden">
+                                        Please provide Address 2
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Unit Number</h2>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField value="{!Application.Previous_Address_Unit_Number__c}" />
+                                </div>
+                            </div>
+                            -->
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>City</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousAddressCityField"
+                                        value="{!Application.Previous_Address_City__c}" />
+                                    <div id="previousAddressCityErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide the city.</div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <h2>State</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:selectList id="previousProvinceField"
+                                        value="{!SelPreviousProvince}" size="1">
+                                        <apex:selectOptions value="{!PreviousProvinceOptions}" />
+                                    </apex:selectList>
+                                    <div id="previousProvinceErrMsg" class="invalidFieldMsg hidden">
+                                        Please select the state.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Postal Code</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousAddressPostalCodeField"
+                                        value="{!Application.Previous_Address_PostalCode__c}" />
+                                    <div id="previousAddressPostalCodeErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide the postal code.</div>
+                                    <div id="previousAddressPostalCodeProvinceErrMsg"       
+                                    class="invalidFieldMsg hidden">Postal Code does not match selected State.</div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>How long have you lived at this address?</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <div class="fleft">
+                                        <p>Years</p>
+                                        <apex:inputText id="yearsAtPreviousAddressField"
+                                            style="width:100px; margin-right:2px;"
+                                            value="{!Application.Years_At_Previous_Address__c}" maxlength="2"/>
+                                    </div>
+                                    <div class="fleft">
+                                        <p>Months</p>
+                                        <apex:inputText id="monthsAtPreviousAddressField"
+                                            style="width:100px;"
+                                            value="{!Application.Months_At_Previous_Address__c}" maxlength="2"/>
+                                    </div>
+                                    <div id="howLongAtPreviousAddressErrMsg"
+                                        class="clearboth invalidFieldMsg hidden">Please specify
+                                        how long you lived at this address (month must be between 0
+                                        and 11).</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submitBtn fleft">
+                        <input type="submit" id="stepTwoContinue" value="CONTINUE"
+                            onclick="validateStepTwo(); return false;" />
+                        <apex:actionFunction action="{!saveStepTwo}" name="saveStepTwo"
+                            oncomplete="checkStepTwoResponseAndTransition()"
+                            rerender="stepTwoPageMessages" />
+                    </div>
+                    <div class="backBtn fleft">
+                        <input type="submit" id="stepTwoBack" value="BACK"
+                            onclick="afStepTwoBack(); return false;" />
+                    </div>
+                    <div id="stepTwoLoading" class="loadingSpinner fleft">
+                        <apex:image url="{!$Resource.loadingGif}"
+                            style="vertical-align:middle;" />
+                    </div>
+                    <div class="clearboth">&nbsp;</div>
+                </div>
+            </apex:actionRegion>
+            <div class="sectionHeader">
+                <h3>&nbsp;&nbsp;&nbsp;3. Employment Information</h3>
+            </div>
+            <apex:actionRegion >
+                <div id="stepThree" class="hidden">
+                    <div class="appForm">
+                        <apex:pageMessages id="stepThreePageMessages" />
+                        <div class="appFormBlock">
+                            <div class="info">Employer Address</div>
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What is the name of your employer?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="employerNameField"
+                                    value="{!Application.Employer_Name__c}" />
+                                <div id="employerNameErrMsg" class="invalidFieldMsg hidden">
+                                    Please provide the name of your employer.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Employer Phone Number</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="employerPhoneField"
+                                    value="{!Application.Employer_Phone__c}" />
+                                <div id="employerPhoneErrMsg" class="invalidFieldMsg hidden">
+                                    Please provide your employer's phone number.</div>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>PO Box (GD if applicable)</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="employerPOBox" value="{!Application.Employer_PO_Box__c}" />                                
+                            </div>
+                        </div>
+                        -->
+                        
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Address 1</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="employerStreetNumberField"
+                                    value="{!Application.Employer_Street_Number__c}" />
+                                <div id="employerStreetNumberErrMsg"
+                                    class="invalidFieldMsg hidden">
+                                        Please provide the Address 1
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Address 2</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="employerStreetNameField"
+                                    value="{!Application.Employer_Street_Name__c}" />
+                                <div id="employerStreetNameErrMsg"
+                                    class="invalidFieldMsg hidden">Please provide the Address 2
+                                </div>
+                            </div>
+                        </div>
+                        <!--  
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Unit Number</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.Employer_Unit_Number__c}" />
+                            </div>
+                        </div>
+                        -->
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>City</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="employerCityField"
+                                    value="{!Application.Employer_City__c}" />
+                                <div id="employerCityErrMsg" class="invalidFieldMsg hidden">Please
+                                    provide the city.</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <h2>State</h2>
+                                <span style="color: red">*</span>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:selectList id="employerProvinceField"
+                                    value="{!SelEmployerProvince}" size="1">
+                                    <apex:selectOptions value="{!EmployerProvinceOptions}" />
+                                </apex:selectList>
+                                <div id="employerProvinceErrMsg" class="invalidFieldMsg hidden">
+                                    Please select the state
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Postal Code</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="employerPostalCodeField"
+                                    value="{!Application.Employer_PostalCode__c}" />
+                                <div id="employerPostalCodeErrMsg"
+                                    class="invalidFieldMsg hidden">Please provide the postal
+                                    code.</div>
+                                <div id="employerPostalCodeProvinceErrMsg"      
+                                    class="invalidFieldMsg hidden">Postal Code does not match selected State.</div>
+                            </div>
+                        </div>
+                         -->
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What is your position / occupation?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.Occupation__c}" />
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>How long have you worked there?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div class="fleft">
+                                    <p>Years</p>
+                                    <apex:inputText id="yearsAtEmployerField"
+                                        style="width:100px; margin-right:2px;"
+                                        value="{!Application.Employment_Years__c}" maxlength="2"/>
+                                </div>
+                                <div class="fleft">
+                                    <p>Months</p>
+                                    <apex:inputText id="monthsAtEmployerField"
+                                        style="width:100px;"
+                                        value="{!Application.Employment_Months__c}" maxlength="2"/>
+                                </div>
+                                <div id="howLongAtEmployerErrMsg"
+                                    class="clearboth invalidFieldMsg hidden">Please specify
+                                    how long you worked for this employer (month must be between 0
+                                    and 11).</div>
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What is your gross monthly income?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField id="grossMonthlyIncomeField"
+                                    value="{!Application.Gross_Monthly_Income__c}" />
+                                <div id="grossMonthlyIncomeErrMsg"
+                                    class="invalidFieldMsg hidden">Please provide your gross
+                                    monthly income.</div>
+                            </div>
+                        </div>
+                        <div id="previousEmployerSection" class="hidden">
+                            <div class="info">Previous Employer Address</div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>What is the name of your employer?</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousEmployerNameField"
+                                        value="{!Application.Previous_Employer_Name__c}" />
+                                    <div id="previousEmployerNameErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide the name
+                                        of your employer.</div>
+                                </div>
+                            </div>
+                            <!--  
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>PO Box (GD if applicable)</h2>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousEmployerPOBox" value="{!Application.Previous_Employer_PO_Box__c}" />                                    
+                                </div>
+                            </div>
+                            -->
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Address 1</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousEmployerStreetNumberField"
+                                        value="{!Application.Previous_Employer_Street_Number__c}" />
+                                    <div id="previousEmployerStreetNumberErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide Address 1
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Address 2</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousEmployerStreetNameField"
+                                        value="{!Application.Previous_Employer_Street_Name__c}" />
+                                    <div id="previousEmployerStreetErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide Address 2</div>
+                                </div>
+                            </div>
+                            <!--  
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Unit Number</h2>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField value="{!Application.Previous_Employer_Unit_Number__c}" />
+                                </div>
+                            </div>
+                            -->
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>City</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousEmployerCityField"
+                                        value="{!Application.Previous_Employer_City__c}" />
+                                    <div id="previousEmployerCityErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide the city.</div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <h2>State</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:selectList id="previousEmployerProvinceField"
+                                        value="{!SelPreviousEmployerProvince}" size="1">
+                                        <apex:selectOptions value="{!PreviousEmployerProvinceOptions}" />
+                                    </apex:selectList>
+                                    <div id="previousEmployerProvinceErrMsg"
+                                        class="invalidFieldMsg hidden">Please select the state</div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>Postal Code</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousEmployerPostalCodeField"
+                                        value="{!Application.Previous_Employer_PostalCode__c}" />
+                                    <div id="previousEmployerPostalCodeErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide the postal
+                                        code.</div>
+                                    <div id="previousEmployerPostalCodeProvinceErrMsg"      
+                                    class="invalidFieldMsg hidden">Postal Code does not match selected State.</div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>How long did you work there?</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <div class="fleft">
+                                        <p>Years</p>
+                                        <apex:inputText id="yearsAtPreviousEmployerField"
+                                            style="width:100px; margin-right:2px;"
+                                            value="{!Application.Previous_Employment_Years__c}" maxlength="2"/>
+                                    </div>
+                                    <div class="fleft">
+                                        <p>Months</p>
+                                        <apex:inputText id="monthsAtPreviousEmployerField"
+                                            style="width:100px;"
+                                            value="{!Application.Previous_Employment_Months__c}" maxlength="2"/>
+                                    </div>
+                                    <div id="howLongAtPreviousEmployerErrMsg"
+                                        class="clearboth invalidFieldMsg hidden">Please specify
+                                        how long you worked for your previous employer.</div>
+                                </div>
+                            </div>
+                            <div class="appFormBlock">
+                                <div class="appFormBlockLeft">
+                                    <div>
+                                        <h2>What was your gross monthly income?</h2>
+                                        <span style="color: red">*</span>
+                                    </div>
+                                </div>
+                                <div class="appFormBlockRight">
+                                    <apex:inputField id="previousGrossMonthlyIncomeField"
+                                        value="{!Application.Previous_Gross_Monthly_Income__c}" />
+                                    <div id="previousGrossMonthlyIncomeErrMsg"
+                                        class="invalidFieldMsg hidden">Please provide your
+                                        previous gross monthly income.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submitBtn fleft">
+                        <input type="submit" id="stepThreeContinue" value="CONTINUE"
+                            onclick="validateStepThree(); return false;" />
+                        <apex:actionFunction action="{!saveStepThree}"
+                            name="saveStepThree"
+                            oncomplete="checkStepThreeResponseAndTransition()"
+                            rerender="stepThreePageMessages" />
+                    </div>
+                    <div class="backBtn fleft">
+                        <input type="submit" id="stepThreeBack" value="BACK"
+                            onclick="afStepThreeBack(); return false;" />
+                    </div>
+                    <div id="stepThreeLoading" class="loadingSpinner fleft">
+                        <apex:image url="{!$Resource.loadingGif}"
+                            style="vertical-align:middle;" />
+                    </div>
+                    <div class="clearboth">&nbsp;</div>
+                </div>
+            </apex:actionRegion>
+            <div class="sectionHeader">
+                <h3>&nbsp;&nbsp;&nbsp;4. Legal Consent</h3>
+            </div>
+            <apex:actionRegion >
+                <div id="stepFour" class="hidden">
+                    <div class="appForm">
+                        <apex:pageMessages id="stepFourPageMessages" />
+                        <div class="appFormBlock">
+                            <div class="info">Customer Consent</div>
+                            <div>
+                                <h2>Please review the Customer Consent below and confirm
+                                    that you have read and agree to its content by checking the
+                                    boxes provided:</h2>
+                                <span style="color: red">*</span>
+                                <div class="consentText">Sample Customer Consent
+                                </div>
+                               <!-- <div class="consentText">I certify that the information
+                                    given on the application form is true and correct and by
+                                    clicking the box below and submitting this application, I
+                                    accept as notice in writing of, and consent to, collection,
+                                    use, disclosure and verification of any credit, personal or
+                                    other information about me at any time from, to or with credit
+                                    reporting agency, credit grantor, or any person, and I
+                                    authorize those parties to give information to you. I
+                                    understand that all such information shall be collected, used
+                                    and disclosed by you, and any of your affiliates, agents,
+                                    service providers, successors and assigns to assess my
+                                    creditworthiness for this application and my on-going
+                                    creditworthiness, for determining my eligibility for any other
+                                    products or services to be offered to me and for such other
+                                    uses not prohibited by law. Lending360 may request additional
+                                    documentation for verification purposes in order to protect my
+                                    identity and to ensure accurate credit bureau reporting.</div>
+                            </div>  -->
+                            <div>
+                                <h2>By checking this box you confirm the following: I have
+                                    read and agree to the Customer Consent information
+                                    above.&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+                                <apex:inputCheckbox id="isConsumerLegalConsentField"
+                                    value="{!isConsumerLegalConsent}" />
+                                <div>
+                                    <label id="isConsumerLegalConsentErrMsg"
+                                        class="invalidField hidden">Lending360cannot proceed
+                                        without your consent.</label>
+                                </div>
+                            </div>
+                            <div class="consentText">Sample Customer Consent information
+                            </div>
+                           <!-- <div class="consentText">I also consent to the use of this
+                                information for marketing purposes. Marketing includes the
+                                marketing and promotion of products, goods and services which
+                                you believe may be of interest to me. You may contact me by
+                                e-mail using the e-mail address I have provided for special
+                                offers or standard service messages, including collections. To
+                                ensure your security, we will not include sensitive information
+                                in an e-mail. If at any time you would like to withdraw your
+                                consent or update your profile and preferences, you can do so by
+                                clicking here (or clicking the unsubscribe link on our 'About
+                                Us' page) or by contacting us directly.</div>
+                            <div>  -->
+                                <h2>By checking this box you confirm the following: I agree
+                                    to be contacted by email to receive special offers and product
+                                    updates from Lending360&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+                                <apex:inputCheckbox value="{!Application.Marketing_Consent__c}" />
+                            </div>
+                        </div>
+
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Have you or any close relative of yours ever held a
+                                        senior position in government, political party, military,
+                                        tribunal or government-owned corporation of a foreign country?
+                                    </h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectRadio id="politicallyExposedForeignPersonField"
+                                        value="{!SelPoliticallyExposedForeignPerson}">
+                                        <apex:selectOptions value="{!PoliticallyExposedForeignPersonOptions}" />
+                                    </apex:selectRadio>
+                                    <div id="politicallyExposedForeignPersonErrMsg"
+                                        class="invalidFieldMsg hidden">Please answer the
+                                        question.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="whoHeld" class="appFormBlock hidden">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Who held the position?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.PEFP_Who_Held_Position__c}" />
+                            </div>
+                        </div>
+                        <div id="whenHeld" class="appFormBlock hidden">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>When was the position held?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.PEFP_When_Held__c}" />
+                            </div>
+                        </div>
+                        <div id="whereHeld" class="appFormBlock hidden">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Where was the position held?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.PEFP_Where_Held__c}" />
+                            </div>
+                        </div>
+                        <div class="appFormBlock">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>Excluding the persons named on the application, will a
+                                        third party or any other person benefit from, or give
+                                        direction on, this account?</h2>
+                                    <span style="color: red">*</span>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <div>
+                                    <apex:selectRadio id="thirdPartyDirectionField"
+                                        value="{!SelThirdPartyDirection}">
+                                        <apex:selectOptions value="{!ThirdPartyDirectionOptions}" />
+                                    </apex:selectRadio>
+                                    <div id="thirdPartyDirectionErrMsg"
+                                        class="invalidFieldMsg hidden">Please answer the
+                                        question.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="whoWillDirect" class="appFormBlock hidden">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What is the name of the person who will give direction
+                                        on this account?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.TPD_Who_Will_Direct__c}" />
+                            </div>
+                        </div>
+                        <div id="relationshipToApp" class="appFormBlock hidden">
+                            <div class="appFormBlockLeft">
+                                <div>
+                                    <h2>What is the relationship to the person named on the
+                                        application?</h2>
+                                </div>
+                            </div>
+                            <div class="appFormBlockRight">
+                                <apex:inputField value="{!Application.TPD_Relationship_To_Applicant__c}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submitBtn fleft">
+                        <input type="submit" id="stepFourSubmit" value="Submit"
+                            onclick="validateStepFour(); return false;" />
+                        <apex:actionFunction action="{!saveStepFour}" name="saveStepFour"
+                            oncomplete="checkStepFourResponseAndTransition()"
+                            rerender="stepFourPageMessages" />
+                    </div>
+                    <div class="backBtn">
+                        <input type="submit" value="BACK"
+                            onclick="afStepFourBack(); return false;" />
+                    </div>
+                    <div class="clearboth">&nbsp;</div>
+                </div>
+            </apex:actionRegion>
+        </div>
+        <div id="processingDialog">
+            <div style="display: inline-block;">
+                <apex:image url="{!$Resource.loadingGif}"
+                    style="vertical-align:middle;" />
+                &nbsp; <span id="statusText">Processing application...</span>
+            </div>
+        </div>
+    </apex:form>
+</body>
+    </html>
+</apex:page>

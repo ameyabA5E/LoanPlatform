@@ -1,0 +1,37 @@
+<apex:page showHeader="false" sidebar="false" 
+            controller="ApplicationDecisionController" 
+            standardstylesheets="false" 
+            docType="html-5.0" applyBodyTag="false" 
+            applyHtmlTag="false">
+    <html>
+                
+        <apex:outputPanel rendered="{!application.Decision__c == 'Approved'}">
+            <div class="fleft">
+                <div class="msgBlock">
+                    <h2>Your eligibility is for Rupees {!application.Approved_Amount__c}</h2>
+                    <h2>Your will receive an email from Lending360 to authenticate yourself</h2>
+                    <h2>Lending360 representative will contact you for further steps.</h2>
+                </div>
+            </div>
+        </apex:outputPanel>
+        
+        
+        <apex:outputPanel rendered="{!application.Decision__c == 'Needs Review'}">
+            <div class="fleft">
+                <div class="msgBlock">
+                    <h2>We need to further review your Application</h2>
+                    <h2>Lending360 representative will contact you to get additional information</h2>
+                </div>
+            </div>
+        </apex:outputPanel>
+        
+        <apex:outputPanel rendered="{!application.Decision__c == 'Declined'}">
+            <div class="fleft">
+                <div class="msgBlock">
+                    <h2>Sorry we will not be able to proceed with your current application.</h2>
+                </div>
+            </div>
+        </apex:outputPanel>
+            
+    </html>
+</apex:page>

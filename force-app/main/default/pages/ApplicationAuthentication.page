@@ -1,0 +1,53 @@
+<apex:page showHeader="false" sidebar="false" controller="ApplicationAuthenticationController" standardstylesheets="false" docType="html-5.0" applyBodyTag="false" applyHtmlTag="false" action="{!emailAuthenticateComplete}">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        
+        <apex:stylesheet value="{!URLFOR($Resource.ApplicationResource, 'css/traction/application.css')}"/>
+        <apex:includeScript value="{!$Resource.jQuery}"/>
+        <apex:includeScript value="{!URLFOR($Resource.ApplicationResource, 'js/traction/application.js')}" />
+        <script type="text/javascript">
+            var topOrigin = '{!JSENCODE(AppFormSettings.Parent_Page_Domain__c)}';
+            
+            $(document).ready( function () {
+                scrollToTop();            
+            });
+            
+            function loading(id) {
+                // Disable continue and do not continue buttons
+                $("[id*=id]").attr("disabled", "true");
+                // Show spinner
+                $("#loading").show();
+            }
+        </script>
+    </head>
+    <body>
+    <!-- Google Tag Manager -->
+   
+    <!-- End Google Tag Manager -->
+    <div id="innerContainer" class="inner-container"> 
+        <!--wrapArea Start-->
+        <apex:form id="application-result">
+            
+            <apex:outputPanel layout="block" rendered="{!emailAuthPass}">
+                <div class="fleft">
+                    <div class="msgBlockSuccess">
+                        <h2>Thank you for the confirmation</h2>
+                        <h2>Lending360 representative will contact you for further steps.</h2>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel layout="block" rendered="{!!emailAuthPass}">
+                <div class="fleft">
+                    <div class="msgBlockSuccess">
+                        <h2>Your Application not found</h2>
+                        <h2>Please contact Lending360</h2>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </apex:form>
+    </div>
+    </body>
+</html>
+</apex:page>

@@ -1,0 +1,153 @@
+<!-- 
+/**************************************************************************************************
+ *
+ *  Visualforce Page:   
+ *
+ *  @description : This Visualforce Page is responsible for displaying and processing potential matches 
+ *  @author : A5E Consulting
+ *  @date : 03/30/2016
+ *
+ *  Change History:
+ *
+ *  Developer       Date          Description
+ *  ------------------------------------------------------------------------------------------------
+ *
+ *  A5E Consulting 03/30/2016     VF Page Created
+ *  A5E Consulting 04/05/2016     Data table to display Potential matches
+ *  A5E Consulting 04/05/2016     Outputpanel to display validation errors 
+ *  A5E Consulting 04/05/2016     Outputpanel to refresh the parent window 
+ *  A5E Consulting 04/05/2016     Birth Date on Potential matches
+ 
+ *************************************************************************************************/
+ -->
+
+<apex:page standardController="Application__c">
+ <!-- this Vp use extensions="PotentialMatchController" -->   
+ <!--
+    <style type="text/css">
+        .outBorder {
+            border:3px outset black;          
+        }
+        .inBorder{
+            border-top:2px outset black;
+            border-left:2px outset black;
+        }
+    </style> 
+    
+    <apex:form id="form"> 
+        <apex:outputpanel rendered="{!(manualReview && !refreshPage)}">
+        
+            <apex:dataTable value="{!existingWrappedAccounts}" var="wrappedAccnt" styleclass="outBorder" rendered="{!existingWrappedAccounts != null && !existingWrappedAccounts.empty}">
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >Select</apex:outputLabel>
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!wrappedAccnt.selected}"/> 
+                </apex:column>
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >First Name</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.accnt.FirstName}" /> 
+                    </apex:outputLink>  
+                    
+                </apex:column>
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >Last Name</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.accnt.LastName}" />
+                    </apex:outputLink>                      
+                </apex:column>
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >Email</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.accnt.PersonEmail}" />
+                    </apex:outputLink>                      
+                </apex:column> 
+                                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >Birth Date</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.birthdateStr}" />
+                    </apex:outputLink>                      
+                </apex:column>  
+                
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >Street</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.accnt.PersonMailingStreet}" />
+                    </apex:outputLink>                      
+                </apex:column>  
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >City</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.accnt.PersonMailingCity}" />
+                    </apex:outputLink>                      
+                </apex:column>  
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >Province</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.accnt.PersonMailingState}" />
+                    </apex:outputLink>                      
+                </apex:column>  
+                                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header"> 
+                        <apex:outputLabel >Postal Code</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedAccnt.accountLink}" target="_blank">
+                        <apex:outputText value="{!wrappedAccnt.accnt.PersonMailingPostalCode}" />
+                    </apex:outputLink>                      
+                </apex:column>  
+                
+               
+                  
+            </apex:dataTable> 
+           
+            <apex:outputPanel rendered="{!(!refreshPage && validationErrMsg!=null)}">
+                <br/><apex:outputText style="color:red;" value="{!validationErrMsg}" /><br/>
+            </apex:outputPanel>
+        
+            <br/>    
+            <apex:commandLink action="{!keepSameCustomer}" value="Keep Same Customer" />
+            &nbsp;&nbsp;        
+            <apex:commandLink action="{!assignSelected}" value="Assign Selected" rendered="{!existingWrappedAccounts != null && !existingWrappedAccounts.empty}" />
+            &nbsp;&nbsp;
+            <apex:commandLink action="{!createNewNAssign}" value="Create New and Assign" />
+                        
+        </apex:outputpanel>
+        
+        <apex:outputPanel rendered="{!refreshPage}">
+            <br/><br/>
+            <apex:outputText style="color:red;" value="Wait for the Page to get refreshed" />
+            <script>
+                setTimeout(function(){window.top.location='/{!Application__c.id}';}, 3000);
+            </script>
+        </apex:outputPanel>
+        
+        <apex:outputpanel rendered="{!!manualReview}">
+            <apex:outputText value="Application not marked for Manual Review" />
+        </apex:outputPanel>
+     
+    </apex:form>-->
+</apex:page>

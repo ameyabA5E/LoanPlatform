@@ -1,0 +1,145 @@
+<apex:page controller="PAPInformationProductController" sidebar="false" showHeader="false">
+
+    <script>
+    window.onload = function(){
+        //alert('loaded');
+        document.getElementById('{!$Component.papForm.papPageBlock.updateButton}').style.display = 'none';
+        document.getElementById('{!$Component.papForm.papPageBlock.updateButtonDisable}').style.display = 'block';
+    }
+    function showUpdateButtonJS(){
+        //alert();
+        if(document.getElementById('{!$Component.papForm.papPageBlock.check}').checked == true &&
+           document.getElementById('{!$Component.papForm.papPageBlock.papSection.papapbsitrcode.papTranCode}').value != '' &&
+           document.getElementById('{!$Component.papForm.papPageBlock.papSection.pappbsibkcode.papBankCode}').value != '' &&
+           document.getElementById('{!$Component.papForm.papPageBlock.papSection.pappbsiaccno.papAccNumber}').value != '' 
+           //&& document.getElementById('{!$Component.papForm.papPageBlock.pbsfile.pbsifile.filUpload}').value != '' 
+        ){
+            document.getElementById('{!$Component.papForm.papPageBlock.updateButton}').style.display = 'block';
+            document.getElementById('{!$Component.papForm.papPageBlock.updateButtonDisable}').style.display = 'none';
+        }else{
+            document.getElementById('{!$Component.papForm.papPageBlock.updateButton}').style.display = 'none';
+            document.getElementById('{!$Component.papForm.papPageBlock.updateButtonDisable}').style.display = 'block';
+        }
+        
+    }
+    
+    function completePAPJS(){
+        var r = confirm("Click OK to complete the PAP Information process");
+        if (r == true) {
+            completePAP();
+        }
+    }
+    
+    function openpopup(id)
+    {
+    //alert(id);
+  
+     PopupCenter('/apex/showImage?id='+id,'',450,450);
+    }
+    function PopupCenter(url, title, w, h) {
+        // Fixes dual-screen position                         Most browsers      Firefox
+        var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+        var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+    
+        var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+    
+        var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+        var top = ((height / 2) - (h / 2)) + dualScreenTop;
+        var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+    
+        // Puts focus on the newWindow
+        if (window.focus) {
+            newWindow.focus();
+        }
+    }
+    </script>
+    <apex:form id="papForm">
+    
+        <apex:pagemessages ></apex:pagemessages>
+        
+        <apex:actionFunction action="{!updatePaymentMethod}" name="completePAP"/>
+        
+        <apex:pageBlock id="errorPanel" rendered="{!showError}">
+            <h2>{!errorMessage}</h2>
+        </apex:pageBlock>
+        
+        <apex:outputPanel id="sucessPanel" rendered="{! showSuccessMessage}">
+           <Strong>PAP Information has been added.</Strong>
+           <br/>
+           <script>
+               window.opener.location='/{!ProductRec.Id }';
+               window.close();
+           </script>
+        </apex:outputPanel>
+       
+        <apex:pageBlock id="papPageBlock" rendered="{! ((showError == false) && (showSuccessMessage == false))}">
+            <apex:pageBlockSection columns="3" id="papSection" >
+                <apex:pageBlockSectionItem id="papapbsitrcode" dataStyle="width:10%" labelStyle="width:10%">
+                    <apex:outputLabel style="width : 150px">Transit Code</apex:outputLabel>
+                    <apex:inputfield id="papTranCode" value="{! productRec.PAP_Transit_Code__c}" html-placeholder="Transit Code" onblur="showUpdateButtonJS();"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="pappbsibkcode"  dataStyle="width:10%" labelStyle="width:10%">
+                    <apex:outputLabel style="width : 150px">Bank Code</apex:outputLabel>
+                    <apex:inputField id="papBankCode" value="{!productRec.PAP_Bank_Code__c}" html-placeholder="Bank Code" onblur="showUpdateButtonJS();"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem id="pappbsiaccno"  dataStyle="width:10%" labelStyle="width:10%">
+                    <apex:outputLabel style="width : 300px">Account Number</apex:outputLabel>
+                    <apex:inputField id="papAccNumber" value="{!productRec.PAP_Account_Number__c}" html-placeholder="Account Number" onblur="showUpdateButtonJS();"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection >
+                <apex:image url="{!$Resource.PAPPortalPageImage}" width="80%" style="padding-left: 20%;"/>
+       
+                <apex:pageBlockTable value="{!lstAttachment }" var="temp" rows="8">
+                    <apex:column headerValue="File Name">
+                        {!temp.Name}
+                    </apex:column>
+                    <apex:column headerValue="Link" >
+                     <a href="#" onclick="openpopup('{!temp.Id}');"> Click </a>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection id="pbsfile" columns="1">
+            <apex:actionRegion >
+                <apex:pageBlockSectionItem id="pbsifile">
+                    <apex:outputLabel >Browse for your document</apex:outputLabel>
+                    <apex:inputFile id="filUpload" value="{!papSupportDocument.Body}" accept="{!acceptFormat}" fileSize="{!fileSize}"  fileName="{!papSupportDocument.name}" onblur="showUpdateButtonJS();"></apex:inputFile>
+                </apex:pageBlockSectionItem>
+               </apex:actionRegion> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel ></apex:outputLabel>
+                    <!--<apex:commandButton id="uploadfile" value="Upload" action="{!upload}"/>-->
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel ></apex:outputLabel>
+                    <apex:outputLabel ></apex:outputLabel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:outputLabel style="text-align: center; font-size: 16px; font-weight: bold; display: block;">Terms and Conditions for Pre-Authorized Debit</apex:outputLabel>
+            <apex:outputPanel layout="block" style="height: 200px; overflow: scroll; width: 90%; padding-left: 50px;">
+                <p>
+                    Terms and Conditions 1<br/>
+                    Terms and Conditions 2<br/>
+                    Terms and Conditions 3<br/>
+                    Terms and Conditions 4<br/>
+                </p>
+            </apex:outputPanel>
+            <apex:inputCheckbox id="check" value="{!acceptTermsCondition}" onchange="showUpdateButtonJS();"/>
+            <apex:outputLabel >I accept the Terms and Conditions</apex:outputLabel>
+            
+            <apex:commandButton id="updateButtonDisable" value="Update Payment Method" style="margin-left: 80%;" disabled="true"/>
+            <apex:commandButton id="updateButton" onclick="completePAPJS();return false;" value="Update Payment Method" style="margin-left: 80%;"/>
+           
+            
+        </apex:pageBlock>
+        
+            
+        
+    </apex:form>
+    
+</apex:page>

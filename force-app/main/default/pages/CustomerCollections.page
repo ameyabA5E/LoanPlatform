@@ -1,0 +1,326 @@
+<!-- 
+/**************************************************************************************************
+ *
+ *  Visualforce Page:   
+ *
+ *  @description : This Visualforce Page is responsible for displaying Customer Collection Information 
+ *  @author : A5E Consulting
+ *  @date : 12/27/2016
+ * 
+ *************************************************************************************************/
+ -->
+
+<apex:page standardController="Account" extensions="CustomerCollectionsController" showHeader="false" sidebar="false" docType="html-5.0" applyBodyTag="false" applyHtmlTag="false">
+
+    <!-- 
+    <apex:includeScript value="{!$Resource.jQuery}" />
+    <apex:includeScript value="{!URLFOR($Resource.jQueryUI, 'jquery-ui.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ApplicationResource, 'js/traction/application.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ApplicationResource, 'js/traction/validation.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.jQueryUI, 'jquery-ui.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.ApplicationResource, 'css/traction/application.css')}" />
+    -->    
+     
+    <style type="text/css">
+        .outBorder {
+            //border:3px outset black;          
+        }
+        th{
+            text-align:center;
+        }
+        .inBorder{
+            //border-top:2px outset black;
+            //border-left:2px outset black;
+                border-bottom: 1px solid #e3deb8;
+        }
+        table, th, td {
+            //border: 1px solid black;
+            //border:3px outset black; 
+            border-collapse: collapse;
+            border: 1px solid #e3deb8 !important;
+        }
+        .bPageBlock{
+            overflow: auto;
+        }
+        .topButtons{
+            margin-left: 45%;
+        }
+        .pbBody{
+            text-align: center;
+        }
+    </style>
+    
+    <script>
+        function newPage(){
+            
+            window.open('{!urlForPage}');
+        }
+    </script>
+    <apex:form id="form" style="text-align:center;">
+        <apex:pageBlock >
+        <apex:commandButton value="View" onclick="newPage();"/>
+        <apex:pageBlockSection columns="1" >
+        <apex:pageBlock >
+            <apex:commandButton value="Cancel" action="{!cancelButton}" id="cancelButton1" />
+            <apex:commandButton action="{!saveDelinquentProducts}" value="Save Delinquent Products" id="saveProdButton1"/>
+            <apex:outputText style="text-align: left; font-size: 14px; font-weight: bold; display: block;" value="Delinquent Products"/>                
+            <apex:pageBlockTable value="{!wrappedProducts}"  var="wrappedProduct" columns="9" title="Delinquent Products">
+                <apex:column styleclass="inBorder" rowspan="2">
+                    <apex:facet name="header">
+                        <apex:outputLabel >Account Number</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputLink value="{!wrappedProduct.prdLink}" target="_blank">
+                        <apex:outputText value="{!wrappedProduct.prd.Name}" /> 
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column styleclass="inBorder" >
+                    <apex:facet name="header">
+                        <apex:outputLabel >System of Record</apex:outputLabel>
+                    </apex:facet>
+                        <apex:outputText value="{!wrappedProduct.prd.Source_System__c}" /> 
+                </apex:column>
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >Interest Rate</apex:outputLabel>
+                    </apex:facet>
+                        <apex:outputText value="{!wrappedProduct.prd.Interest_Rate__c}" /> 
+                </apex:column>
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >Current Balance</apex:outputLabel>
+                    </apex:facet>
+                        <apex:outputText value="{!wrappedProduct.prd.Current_Balance__c}" /> 
+                </apex:column>
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >Current Balance Effective Date</apex:outputLabel>
+                    </apex:facet>
+                        <apex:outputText value="{!wrappedProduct.curBalEffDate}" /> 
+                </apex:column>
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >Payment Amount Due</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputText value="{!wrappedProduct.prd.Effective_Next_Payment_Amount__c}" />
+                </apex:column>
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >Number of Days Delinquent</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputText value="{!wrappedProduct.prd.Delinquency_Days__c}" />
+                </apex:column>
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >External Status</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputText value="{!wrappedProduct.prd.External_Status_Description__c}" />
+                </apex:column>
+                
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >VersaPay State</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputText value="{!wrappedProduct.prd.VersaPay_State__c}" />
+                </apex:column>
+                <apex:column breakBefore="True">
+                    <apex:commandButton value="Add PTP" id="newButton" onclick="window.open('{!wrappedProduct.urlForNewPTP}');"/>
+                </apex:column>
+                <apex:column colspan="5" style="padding-left: 2%;">
+                <div style="max-height: 280px;overflow: auto;">
+                    <apex:pageBlockTable value="{!wrappedProduct.listPTPInfo}" var="ptpInfo">
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:outputLabel >Promise to Pay</apex:outputLabel>
+                        </apex:facet>
+                        <apex:outputLink value="/{!ptpInfo.id}" target="_blank">
+                            <apex:outputField value="{!ptpInfo.Name}"/>
+                        </apex:outputLink>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:outputLabel >Amount</apex:outputLabel>
+                        </apex:facet>
+                        <apex:outputField value="{!ptpInfo.PTP_Amount__c}">
+                        <apex:inlineEditSupport showOnEdit="saveProdButton, cancelButton"
+                            hideOnEdit="editButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:outputLabel >Method of Payment</apex:outputLabel>
+                        </apex:facet>
+                        <apex:outputField value="{!ptpInfo.PTP_Method__c}">
+                        <apex:inlineEditSupport showOnEdit="saveProdButton, cancelButton"
+                            hideOnEdit="editButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:outputLabel >Promise Date</apex:outputLabel>
+                        </apex:facet>
+                        <apex:outputfield value=" {!ptpInfo.PTP_Date__c} ">
+                        <apex:inlineEditSupport showOnEdit="saveProdButton, cancelButton"
+                            hideOnEdit="editButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:outputLabel >Promise Met</apex:outputLabel>
+                        </apex:facet>
+                        <apex:outputField value="{!ptpInfo.PTP_Mate__c}">
+                        <apex:inlineEditSupport showOnEdit="saveProdButton, cancelButton"
+                            hideOnEdit="editButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                        </apex:outputField>
+                    </apex:column>
+                </apex:pageBlockTable>
+                </div>
+                </apex:column>
+                
+                <apex:column colspan="4">
+                    <!-- <apex:commandButton value="New PTP Information" id="newButton" onclick="window.open('{!wrappedProduct.urlForNewPTP}');"/> -->
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection columns="1">                
+            <apex:pageBlock >
+                    <apex:commandButton value="Cancel" action="{!cancelButton}" id="cancelButton" />
+                    <apex:commandButton action="{!saveTaskActivity}" value="Save Task and Activities" id="saveButton"/>
+                    <apex:commandButton value="New" id="newButton" onclick="window.open('{!urlForNewActivity}');"/>
+                    <apex:outputText style="text-align: left; font-size: 14px; font-weight: bold; display: block;" value="Tasks & Activities" />
+                    <apex:outputText style="text-align: left; font-size: 14px; color : red; display: block;" value="This Customer has been contacted {!countActivitiesForThisWeek} time(s) in last 5 days" rendered="{!showCount}" />
+                    <div style="max-height:500px; overflow:auto;">
+                    <apex:pageBlockTable value="{!wrappedCustTasks}" var="wrappedCustTask" rendered="{!wrappedCustTasks != null && !wrappedCustTasks.empty}">
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Subject</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputLink value="{!wrappedCustTask.tskLink}" target="_blank">
+                                <apex:outputLabel value="{!wrappedCustTask.tsk.Subject}" escape="false" />
+                            </apex:outputLink> 
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Operational Outcome</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputField value="{!wrappedCustTask.tsk.Operational_Outcome__c}">
+                            <apex:inlineEditSupport showOnEdit="saveButton, cancelButton"
+                                 hideOnEdit="editButton, newButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                            </apex:outputField>
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Legal Followup</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputField value="{!wrappedCustTask.tsk.Legal_Followup__c}">
+                            <apex:inlineEditSupport showOnEdit="saveButton, cancelButton"
+                                 hideOnEdit="editButton, newButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                            </apex:outputField>
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Due Date</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputField value="{!wrappedCustTask.tsk.ActivityDate}">
+                            <apex:inlineEditSupport showOnEdit="saveButton, cancelButton"
+                                 hideOnEdit="editButton, newButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                            </apex:outputField> 
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Call Classification</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputField value="{!wrappedCustTask.tsk.CallClassification1__c}">
+                            <apex:inlineEditSupport showOnEdit="saveButton, cancelButton"
+                                 hideOnEdit="editButton, newButton" event="ondblclick" resetFunction="resetInlineEdit"/>
+                            </apex:outputField> 
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Last Modified By</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputField value="{!wrappedCustTask.tsk.LastModifiedBy.Name}"/> 
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Last Modified Date</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputText value="{0,date,{!dateFormat}}"> <apex:param value="{!wrappedCustTask.tsk.LastModifiedDate}" /> </apex:outputText>
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Assigned To</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputField value="{!wrappedCustTask.tsk.Owner.Name}"/>
+                        </apex:column>
+                        <apex:column styleclass="inBorder">
+                            <apex:facet name="header">
+                                <apex:outputLabel >Comments / Notes</apex:outputLabel>
+                            </apex:facet>
+                            <apex:outputLabel value="{!wrappedCustTask.taskBody}" escape="false" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                    </div>
+            </apex:pageBlock>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection columns="1" > 
+        <apex:pageBlock >
+            <apex:outputText style="text-align: left; font-size: 14px; font-weight: bold; display: block;" value="Notes" />                
+            <apex:pageBlockTable value="{!collectionNoteWrapperList}" var="noteWrapper" >
+                <apex:column styleclass="inBorder">
+                    <apex:facet name="header">
+                        <apex:outputLabel >Account Number</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputText value="{!noteWrapper.prodId.name}" /><br/>
+                    <apex:commandButton value="Add Note" id="newColButton" onclick="window.open('{!noteWrapper.urlForNewCollectionNote}');"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:outputLabel >Collection Notes</apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputText rendered="{! (noteWrapper.listColNteWrp.size <= 0 || noteWrapper.listColNteWrp == null)}">No Notes Available</apex:outputText>
+                    <div style="max-height:200px; overflow:auto;">
+                    <apex:pageBlockTable value="{!noteWrapper.listColNteWrp}" var="wrappedCustColctNote" styleclass="outBorder" columnsWidth="20%,60%,10%,10%" style=" width: 100%;" rendered="{! (noteWrapper.listColNteWrp.size > 0 && noteWrapper.listColNteWrp != null)}">
+                    <apex:column styleclass="inBorder">
+                        <apex:facet name="header">
+                            <apex:outputLabel >Title</apex:outputLabel>
+                        </apex:facet>
+                        <apex:outputLink value="/{!wrappedCustColctNote.nte.id}" target="_blank">
+                            <apex:outputText value="{!wrappedCustColctNote.nte.Title__c}" /> 
+                        </apex:outputLink>
+                    </apex:column>
+                    <apex:column styleclass="inBorder">
+                        <apex:facet name="header">
+                            <apex:outputLabel >Body</apex:outputLabel>
+                        </apex:facet>
+                            <apex:outputText value="{!wrappedCustColctNote.strBody}" /> 
+                    </apex:column>
+                    <apex:column styleclass="inBorder">
+                        <apex:facet name="header">
+                            <apex:outputLabel >Last Modified Date</apex:outputLabel>
+                        </apex:facet>
+                            <apex:outputText value="{!wrappedCustColctNote.strLastModifiedDate}" /> 
+                    </apex:column>
+                    <apex:column styleclass="inBorder">
+                        <apex:facet name="header">
+                            <apex:outputLabel >Last Modified By</apex:outputLabel>
+                        </apex:facet>
+                            <apex:outputText value="{!wrappedCustColctNote.nte.lastModifiedBy.Name}" /> 
+                    </apex:column>
+                    </apex:pageBlockTable>
+                    </div>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>
