@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FieldSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Funding_Type_Released_Uneditable_fields</fullName>
+    <description>Funding Type Released Uneditable fields - for Product trigger</description>
+    <label>Funding Type Released Uneditable fields</label>
+</FieldSet>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Interim_Term_Loan_List_Branch_3_and_4</fullName>
+    <columns>NAME</columns>
+    <columns>Customer__c</columns>
+    <columns>Internal_Status__c</columns>
+    <columns>External_Status_Current__c</columns>
+    <columns>PTP1_Amount__c</columns>
+    <columns>PTP1_Date__c</columns>
+    <columns>PTP1_mate__c</columns>
+    <columns>Payment_Due_Date__c</columns>
+    <columns>Past_Due_Amount__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Source_System__c</field>
+        <operation>equals</operation>
+        <value>Megasys</value>
+    </filters>
+    <filters>
+        <field>Past_Due_Amount__c</field>
+        <operation>greaterThan</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>Branch_Number__c</field>
+        <operation>greaterOrEqual</operation>
+        <value>3</value>
+    </filters>
+    <filters>
+        <field>Internal_Status__c</field>
+        <operation>notEqual</operation>
+        <value>ChargedOff</value>
+    </filters>
+    <filters>
+        <field>External_Status_Current__c</field>
+        <operation>notEqual</operation>
+        <value>Bankruptcy Acct,Credit Counsel Acct,DECEASED</value>
+    </filters>
+    <label>Interim Term Loan List Branch 3 and 4</label>
+</ListView>

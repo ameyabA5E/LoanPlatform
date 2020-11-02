@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DisAmt_not_editable_Traditional_Process</fullName>
+    <active>false</active>
+    <description>Disbursement Amount field is un-editable when the Loan Process Type is Traditional.</description>
+    <errorConditionFormula>AND(
+ISCHANGED(disbursement__c),
+ISPICKVAL(Loan_Process_Type__c, &apos;Traditional&apos;))</errorConditionFormula>
+    <errorDisplayField>disbursement__c</errorDisplayField>
+    <errorMessage>Disbursement Amount field is not editable when the Loan Process Type is Traditional.</errorMessage>
+</ValidationRule>

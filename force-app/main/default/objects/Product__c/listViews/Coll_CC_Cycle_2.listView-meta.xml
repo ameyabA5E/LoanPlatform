@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Coll_CC_Cycle_2</fullName>
+    <columns>NAME</columns>
+    <columns>Customer__c</columns>
+    <columns>Delinquency_Days__c</columns>
+    <columns>Current_Balance__c</columns>
+    <columns>PTP1_Amount__c</columns>
+    <columns>PTP1_Date__c</columns>
+    <columns>Collections_Toolkit__c</columns>
+    <columns>Collection_Sub_Status__c</columns>
+    <columns>State__c</columns>
+    <columns>External_Status_Current__c</columns>
+    <columns>Internal_Status__c</columns>
+    <columns>Last_Payment_Amount__c</columns>
+    <columns>Last_Payment_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>PRIN_Number__c</field>
+        <operation>equals</operation>
+        <value>200</value>
+    </filters>
+    <filters>
+        <field>Delinquency_Cycles__c</field>
+        <operation>equals</operation>
+        <value>2</value>
+    </filters>
+    <filters>
+        <field>Source_System__c</field>
+        <operation>equals</operation>
+        <value>FDR</value>
+    </filters>
+    <filters>
+        <field>External_Status_Current__c</field>
+        <operation>notEqual</operation>
+        <value>Z,D,B</value>
+    </filters>
+    <filters>
+        <field>Current_Balance__c</field>
+        <operation>greaterThan</operation>
+        <value>1</value>
+    </filters>
+    <label>Coll. CC Cycle 2</label>
+</ListView>

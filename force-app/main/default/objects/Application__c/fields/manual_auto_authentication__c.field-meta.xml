@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>manual_auto_authentication__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(((text(Email_Authentication_Status__c) &lt;&gt; &apos;&apos;) || (text(Authentication_Result__c) &lt;&gt; &apos;Passed&apos;) || (text(Fraud_Alert__c) &lt;&gt; &apos;FALSE&apos;)),&apos;Manual Authentication&apos;,
+IF(((text(Email_Authentication_Status__c) == &apos;&apos;) &amp;&amp; (text(Authentication_Result__c) == &apos;Passed&apos;) &amp;&amp; (text(Fraud_Alert__c) == &apos;FALSE&apos;)),&apos;Auto Authentication&apos;,&apos;OTHER&apos;))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Manual/Auto Authentication</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

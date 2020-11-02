@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rent_Slab_1__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Rent Interest Rate 1 for greater than or equal credit score</inlineHelpText>
+    <label>Rent Slab 1</label>
+    <precision>10</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

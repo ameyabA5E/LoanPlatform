@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Funding_Source_Token__c</fullName>
+    <description>To Calculate Source Token depend Branch Number</description>
+    <externalId>false</externalId>
+    <formula>CASE( Branch_Number__c , 
+null, &apos;BA3RI923U3GF&apos;, 
+1, &apos;BA3RI923U3GF&apos;, 
+2, &apos;BA7RDF3X3MP3&apos;, 
+3, &apos;BA3RI923U3GF&apos;, 
+4, &apos;BA7RDF3X3MP3&apos;, 
+&apos;BA3RI923U3GF&apos;)</formula>
+    <inlineHelpText>To Calculate Source Token depend Branch Number</inlineHelpText>
+    <label>Funding Source Token</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

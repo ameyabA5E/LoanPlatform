@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VersaPay_Not_Completed</fullName>
+    <columns>NAME</columns>
+    <columns>Customer__c</columns>
+    <columns>Disbursement_Amount__c</columns>
+    <columns>Funding_Date__c</columns>
+    <columns>VersaPay_State__c</columns>
+    <columns>Last_State_Changed_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>VersaPay_State__c</field>
+        <operation>equals</operation>
+        <value>in_progress</value>
+    </filters>
+    <filters>
+        <field>Loan_Type__c</field>
+        <operation>equals</operation>
+        <value>Affirm Financial Term Loan</value>
+    </filters>
+    <label>VersaPay - Not Completed</label>
+</ListView>

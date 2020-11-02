@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Delinquency_Status_Formula__c</fullName>
+    <description>True if this account is currently delinquent (missed it&apos;s next payment date), false if it is current</description>
+    <externalId>false</externalId>
+    <formula>IF(Payment_Due_Date__c &lt; Today(), True, False)</formula>
+    <inlineHelpText>True if this account is currently delinquent (missed it&apos;s next payment date), false if it is current</inlineHelpText>
+    <label>Is Delinquent</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

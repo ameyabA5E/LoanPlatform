@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PAP_Information</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>PAP Information</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>window.open(&apos;/apex/PAPInformationProduct?id={! Product__c.Id }&apos;,&quot;PAP Information&quot;,&quot;menubar=0, toolbar=1, resizable=1&quot;);</url>
+</WebLink>

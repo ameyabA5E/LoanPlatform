@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Record_Last_Updated_In_Staging__c</fullName>
+    <description>The date this record was last updated from the System of Record</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The date this record was last updated from the System of Record</inlineHelpText>
+    <label>ETL Last Update</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

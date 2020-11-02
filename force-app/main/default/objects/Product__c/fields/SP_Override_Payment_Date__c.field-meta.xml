@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SP_Override_Payment_Date__c</fullName>
+    <description>Scheduled Payment Date - Override Payment Date</description>
+    <externalId>false</externalId>
+    <formula>Override_Payment_Date__c - 1</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Scheduled Payment Date - Override Payment Date</inlineHelpText>
+    <label>SP Override Payment Date</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

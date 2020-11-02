@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Monthly_Fee_Amount__c</fullName>
+    <description>The annual fee charged on this account to the primary cardholder, if applicable; Note that this may be charged monthly (i.e. this amount / 12)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The annual fee charged on this account to the primary cardholder, if applicable; Note that this may be charged monthly (i.e. this amount / 12)</inlineHelpText>
+    <label>Annual Fee</label>
+    <precision>12</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

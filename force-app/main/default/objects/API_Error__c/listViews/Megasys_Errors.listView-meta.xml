@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Megasys_Errors</fullName>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Action__c</columns>
+    <columns>App_FirstName_LastName__c</columns>
+    <columns>Application__c</columns>
+    <columns>Error__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>End_Point__c</field>
+        <operation>contains</operation>
+        <value>Megasys</value>
+    </filters>
+    <label>Megasys Errors</label>
+</ListView>

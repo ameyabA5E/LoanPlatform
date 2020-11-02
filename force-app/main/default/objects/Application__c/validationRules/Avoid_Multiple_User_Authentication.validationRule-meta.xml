@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Avoid_Multiple_User_Authentication</fullName>
+    <active>false</active>
+    <description>UserVerification Site Guest User cannot update if Application Decision is completed and Application Status and Decision update</description>
+    <errorConditionFormula>AND(
+       ISPICKVAL(PRIORVALUE( Decision__c) , &quot;Completed&quot;),
+       $Profile.Name =&apos;UserVerification Profile&apos;,
+       OR(ISCHANGED(Decision__c),
+          ISCHANGED(Application_Status__c)
+       )
+    )</errorConditionFormula>
+    <errorMessage>Cannot Change Application When Decision is Completed and Profile is UserVerification Profile.</errorMessage>
+</ValidationRule>

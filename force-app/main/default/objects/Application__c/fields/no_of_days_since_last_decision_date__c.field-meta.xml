@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>no_of_days_since_last_decision_date__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(text(Decision__c)= &apos;Completed&apos; || text(Decision__c)=&apos;Declined&apos;, Decision_Timestamp__c - Application_Date__c, Now() - Application_Date__c)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>No. Of Days Since Last Decision Date</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

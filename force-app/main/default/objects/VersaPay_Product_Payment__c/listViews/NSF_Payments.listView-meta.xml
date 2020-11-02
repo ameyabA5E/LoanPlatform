@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NSF_Payments</fullName>
+    <columns>NAME</columns>
+    <columns>Product__c</columns>
+    <columns>VersaPay_State__c</columns>
+    <columns>NSF_Fee_Status__c</columns>
+    <columns>VersaPay_Payment_Error__c</columns>
+    <columns>Last_State_Changed_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>VersaPay_State__c</field>
+        <operation>equals</operation>
+        <value>completed_but_nsfed,nsfed</value>
+    </filters>
+    <filters>
+        <field>NSF_Fee_Status__c</field>
+        <operation>notEqual</operation>
+        <value>Processed,Waived</value>
+    </filters>
+    <label>NSF Payments</label>
+</ListView>

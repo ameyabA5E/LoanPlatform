@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VersaPay_Pmts_by_Day</fullName>
+    <booleanFilter>1 AND 2</booleanFilter>
+    <columns>NAME</columns>
+    <columns>Product__c</columns>
+    <columns>VersaPay_State__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Last_State_Changed_Date__c</columns>
+    <columns>Payment_Amount__c</columns>
+    <columns>Posted_To_MegaSys__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>2/15/2017 12:00 AM</value>
+    </filters>
+    <filters>
+        <field>VersaPay_State__c</field>
+        <operation>notEqual</operation>
+        <value>cancelled</value>
+    </filters>
+    <label>VersaPay Pmts by Day</label>
+</ListView>

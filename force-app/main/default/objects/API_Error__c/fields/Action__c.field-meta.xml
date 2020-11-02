@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Action__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Stores the action that is triggering the Error.  This field value should give admins an easier way to determine where the error occurred.</inlineHelpText>
+    <label>Action</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>End_Point__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Create Application</fullName>
+                <default>false</default>
+                <label>Create Application</label>
+            </value>
+            <value>
+                <fullName>Resubmit Application</fullName>
+                <default>false</default>
+                <label>Resubmit Application</label>
+            </value>
+            <value>
+                <fullName>Get Questions</fullName>
+                <default>false</default>
+                <label>Get Questions</label>
+            </value>
+            <value>
+                <fullName>Submit Answers</fullName>
+                <default>false</default>
+                <label>Submit Answers</label>
+            </value>
+            <value>
+                <fullName>MegaSys Service</fullName>
+                <default>false</default>
+                <label>MegaSys Service</label>
+            </value>
+            <value>
+                <fullName>MegaSys Login</fullName>
+                <default>false</default>
+                <label>MegaSys Login</label>
+            </value>
+            <value>
+                <fullName>VersaPay Response</fullName>
+                <default>false</default>
+                <label>VersaPay Response</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>PCoD</controllingFieldValue>
+            <valueName>Create Application</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>PCoD</controllingFieldValue>
+            <valueName>Resubmit Application</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>TransUnion</controllingFieldValue>
+            <valueName>Get Questions</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>TransUnion</controllingFieldValue>
+            <valueName>Submit Answers</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

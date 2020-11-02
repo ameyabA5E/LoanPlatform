@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Errored_Payments</fullName>
+    <columns>NAME</columns>
+    <columns>Product__c</columns>
+    <columns>VersaPay_State__c</columns>
+    <columns>VersaPay_Payment_Error__c</columns>
+    <columns>Last_State_Changed_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>VersaPay_State__c</field>
+        <operation>notEqual</operation>
+        <value>new,completed,completed_but_nsfed,nsfed,in_progress</value>
+    </filters>
+    <label>Errored Payments</label>
+</ListView>

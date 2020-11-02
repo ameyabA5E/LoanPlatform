@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Run_Product_Before_Trigger__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>To run or not to run Product Before Trigger</description>
+    <externalId>false</externalId>
+    <inlineHelpText>To run or not to run Product Before Trigger</inlineHelpText>
+    <label>Run Product Before Trigger</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

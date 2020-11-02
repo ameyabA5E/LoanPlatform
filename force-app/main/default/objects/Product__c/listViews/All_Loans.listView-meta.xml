@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Loans</fullName>
+    <columns>NAME</columns>
+    <columns>Customer__c</columns>
+    <columns>Credit_Limit__c</columns>
+    <columns>Source_System__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>Internal_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Loan_Type__c</field>
+        <operation>equals</operation>
+        <value>Affirm Financial Term Loan</value>
+    </filters>
+    <label>All-Loans</label>
+</ListView>

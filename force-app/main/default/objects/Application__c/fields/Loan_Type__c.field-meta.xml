@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Loan_Type__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Product that the customer is applying for.</inlineHelpText>
+    <label>Loan Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Affirm Financial MasterCard</fullName>
+                <default>false</default>
+                <label>Affirm Financial MasterCard</label>
+            </value>
+            <value>
+                <fullName>Affirm Financial Term Loan</fullName>
+                <default>false</default>
+                <label>Affirm Financial Term Loan</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

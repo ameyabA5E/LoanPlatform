@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Fee_Amount_Outstanding__c</fullName>
+    <description>The total amount of Other Fees outstanding on this account, if applicable</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The total amount of Other Fees outstanding on this account, if applicable</inlineHelpText>
+    <label>Other Fee Amount Outstanding</label>
+    <precision>12</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Delinquency_Status__c</fullName>
+    <description>Whether this account is currently in delinquency, as per the current balance effective date</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Whether this account is currently in delinquency, as per the current balance effective date</inlineHelpText>
+    <label>Delinquency Status</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

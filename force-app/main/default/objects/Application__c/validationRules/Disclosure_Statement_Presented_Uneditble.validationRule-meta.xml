@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Disclosure_Statement_Presented_Uneditble</fullName>
+    <active>false</active>
+    <description>Disclosure Statement Presented Can&apos;t be changed</description>
+    <errorConditionFormula>And(NOT(ISNEW()),ISCHANGED(Disclosure_Statement_Presented__c), Application_Completed_Submitted__c)</errorConditionFormula>
+    <errorDisplayField>Disclosure_Statement_Presented__c</errorDisplayField>
+    <errorMessage>Once set, Disclosure Statement Presented can&apos;t be changed.</errorMessage>
+</ValidationRule>

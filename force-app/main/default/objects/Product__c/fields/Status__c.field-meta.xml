@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <externalId>false</externalId>
+    <label>Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <default>false</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>For Owner Review</fullName>
+                <default>false</default>
+                <label>For Owner Review</label>
+            </value>
+            <value>
+                <fullName>PoC Details Provided</fullName>
+                <default>false</default>
+                <label>PoC Details Provided</label>
+            </value>
+            <value>
+                <fullName>Pre-Filing Review</fullName>
+                <default>false</default>
+                <label>Pre-Filing Review</label>
+            </value>
+            <value>
+                <fullName>Owner Inquiry</fullName>
+                <default>false</default>
+                <label>Owner Inquiry</label>
+            </value>
+            <value>
+                <fullName>Owner Inquiry Received</fullName>
+                <default>false</default>
+                <label>Owner Inquiry Received</label>
+            </value>
+            <value>
+                <fullName>PoC Package Generated</fullName>
+                <default>false</default>
+                <label>PoC Package Generated</label>
+            </value>
+            <value>
+                <fullName>Filing Complete – No Further Action</fullName>
+                <default>false</default>
+                <label>Filing Complete – No Further Action</label>
+            </value>
+            <value>
+                <fullName>Discharged</fullName>
+                <default>false</default>
+                <label>Discharged</label>
+            </value>
+            <value>
+                <fullName>Purchased</fullName>
+                <default>false</default>
+                <label>Purchased</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

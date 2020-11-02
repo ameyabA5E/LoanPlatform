@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Internal_Status_Description__c</fullName>
+    <description>For FDR, a description of this Internal Status Code value</description>
+    <externalId>false</externalId>
+    <formula>CASE( Internal_Status__c , 
+&apos;D&apos;, &apos;Delinquent&apos;, 
+&apos;O&apos;, &apos;Over Limit&apos;, 
+&apos;N&apos;, &apos;Credit Balance&apos;, 
+&apos;X&apos;, &apos;Delinquent and Over Limit&apos;,
+ &apos;Normal or credit balance&apos;)</formula>
+    <inlineHelpText>For FDR, a description of this Internal Status Code value</inlineHelpText>
+    <label>Internal Status Description</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

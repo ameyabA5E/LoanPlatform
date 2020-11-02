@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Charged_Off_Reason_Code__c</fullName>
+    <description>The reason code that this account was charged off for, if applicable</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The reason code that this account was charged off for, if applicable</inlineHelpText>
+    <label>Charge Off Reason Code</label>
+    <length>100</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

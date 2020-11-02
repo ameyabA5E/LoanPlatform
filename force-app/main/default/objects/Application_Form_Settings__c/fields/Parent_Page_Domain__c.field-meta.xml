@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Parent_Page_Domain__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>This is the domain of the page that contains the Application Form iFrame (don&apos;t prepend www or http). Put * to accept any domain.</inlineHelpText>
+    <label>Parent Page Domain</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

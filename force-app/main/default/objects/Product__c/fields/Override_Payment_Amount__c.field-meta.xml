@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Override_Payment_Amount__c</fullName>
+    <description>An override of the next payment amount for automatic processing</description>
+    <externalId>false</externalId>
+    <inlineHelpText>An override of the next payment amount for automatic processing</inlineHelpText>
+    <label>Override Payment Amount</label>
+    <precision>12</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>
