@@ -1,0 +1,55 @@
+<!-- This page is used for Application record Verification -->
+
+<apex:page showHeader="false" sidebar="false"
+           controller="ApplicationVerificationController" 
+           action="{!checkVerifyRequest}"
+           >    
+   
+   <html>
+        <body> 
+        
+            <!--Loading Page -->
+            <apex:outputPanel layout="block" rendered="{!nullVerificationID == true}">
+                <div style="text-align: center; font-size: 14px; line-height: 22px;">
+                    <span>
+                        Loading page...
+                    </span>
+                </div>
+            </apex:outputPanel>
+            
+            <!--No Verification Token on Application-->
+            <apex:outputPanel layout="block" rendered="{!emailVerificationError == true && nullVerificationID == false}">
+                <div style="text-align: center; font-size: 14px; line-height: 22px;">
+                    <span>
+                        It looks like this link has expired.
+                        <br/>
+                        Please call us at 1-855-220-7531 and we will send you a new link.
+                    </span>
+                 </div>   
+            </apex:outputPanel>
+            
+            <!--Already Verified-->
+            <apex:outputPanel layout="block" rendered="{!alreadyVerified == true && nullVerificationID == false}">
+                <div style="text-align: center; font-size: 14px; line-height: 22px;">
+                    <span>
+                        Thank you! Your email has been verified.
+                        <br/>
+                        We can complete the application process.
+                    </span>
+                </div>
+            </apex:outputPanel>
+            
+            <!--Verification is now completed-->
+            <apex:outputPanel layout="block" rendered="{!alreadyVerified == false && emailVerificationError == false && nullVerificationID == false}">
+                <div style="text-align: center; font-size: 14px; line-height: 22px;">
+                    <span>
+                        Thank you! Your email has been verified.
+                        <br/>
+                        We can complete the application process.
+                    </span>
+                </div>
+            </apex:outputPanel>
+            
+        </body>
+    </html>
+</apex:page>

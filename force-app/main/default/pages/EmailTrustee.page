@@ -1,0 +1,520 @@
+<apex:page showHeader="false" controller="EmailTrusteeController" id="page" title="Email Trustee">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:pageMessages id="msg"></apex:pageMessages>
+            <apex:slds />
+            <style>
+                
+                .my-checkbox{
+                width: 1rem;
+                height: 1rem;
+                display: inline-block;
+                vertical-align: middle;
+                border: 1px solid #d8dde6;
+                border-radius: .125rem;
+                background: #fff;
+                transition: border .1s linear,background-color .1s linear;
+                }
+                .slds-scope .slds-table_bordered {
+                border-collapse: separate;
+                border-top: none !important;
+                border: 1px solid #d8dde6;
+                }
+                .stripes-grey{
+                background-size: 160px 160px;background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.03) 50%, #E7E7E7 50%, #E7E7E7 75%, rgba(0, 0, 0, 0.03) 75%, rgba(0, 0, 0, 0.03) 100%, #E7E7E7 100%, #E7E7E7);
+                }
+                .via-border-corner-shapes{
+                border-radius: 0.45rem 0.45rem 0 0;
+                }
+                .via-border-bottom-corners{
+                border-radius: 0 0 0.45rem 0.45rem;
+                }
+                .via-border-radius{
+                border-radius: 0.45rem;
+                border: 1px solid #B6B6B6;
+                }
+                .error-text{
+                color: #E01933 !important;
+                }
+            </style>
+            <script>
+            var showSendButton = false;
+            var validEmail = false;
+            var validSubject =  false;
+            var validMessage = false;
+            var finalEmail = [];
+            
+            // On page load validate all input elements like To address, Email subject, Email body
+            window.onload = function(){
+                validateForm();
+                validateSendEmailButton(); 
+            }
+            
+            // Validate all other elements to enable Email trustee button
+            function validateSendEmailButton(){
+                if(validEmail && validSubject  && validMessage ){
+                    document.getElementById('page:form:EmailTrusteeBtn').disabled = false;
+                }else{
+                    document.getElementById('page:form:EmailTrusteeBtn').disabled = true;
+                }
+                if(finalEmail.length> 0){
+                    getElementsByClassName('email')[0].value = finalEmail.join(';')+';';
+                }
+            }
+            
+            // function to validate Email subject
+            function validateSubject(){
+                var x = getElementsByClassName('emailSubject')[0].value;
+                x = x.trim();
+                if(x == ''){
+                    document.getElementById('subjectInputDiv').classList.add('slds-has-error');
+                    document.getElementById('text-input-id-3-error').classList.add('slds-show');
+                    validSubject = false;
+                    validateSendEmailButton();
+                    return false;
+                }else{
+                    document.getElementById('subjectInputDiv').classList.remove('slds-has-error');
+                    document.getElementById('text-input-id-3-error').classList.remove('slds-show');
+                    validSubject = true;
+                    validateSendEmailButton();
+                    return true;
+                }
+            }            
+            // function to validate Email body
+            function validateEmailMessage(){
+                var x = getElementsByClassName('emailMessage')[0].value;
+                x = x.trim();
+                if(x == ''){
+                    document.getElementById('messageInputDiv').classList.add('slds-has-error');
+                    document.getElementById('text-input-id-4-error').classList.add('slds-show');
+                    validMessage = false;
+                    validateSendEmailButton();
+                    return false;
+                }else{
+                    document.getElementById('messageInputDiv').classList.remove('slds-has-error');
+                    document.getElementById('text-input-id-4-error').classList.remove('slds-show');
+                    validMessage = true;
+                    validateSendEmailButton();
+                }
+            }
+            
+            var timeout = null;
+            
+            // function to validate email address entered by user
+            function validateEmail(){
+                var xEmail = getElementsByClassName('email')[0].value;
+                xEmail = xEmail.trim();
+                if(xEmail[xEmail.length - 1] == ';'){
+                    xEmail = xEmail.substring(0, xEmail.length - 1);
+                }
+                var emailList = xEmail.split(';');
+                finalEmail = [];
+                for(var i = 0; i < emailList.length; i++){
+                    var x = emailList[i];
+                    x=x.trim();
+                    var atpos = x.indexOf("@");
+                    var dotpos = x.lastIndexOf(".");
+                    if(x == '' && !validEmail){
+                        document.getElementById('emailInputDiv').classList.add('slds-has-error');
+                        document.getElementById('text-input-id-1-error').classList.remove('slds-show');
+                        document.getElementById('text-input-id-1-error2').classList.add('slds-show');
+                        validEmail = false;
+                        document.getElementById('page:form:EmailTrusteeBtn').disabled = true;
+                        debugger;
+                        return false;
+                    }
+                    else if ( ValidateEmail(x) == false) {
+                        document.getElementById('emailInputDiv').classList.add('slds-has-error');
+                        document.getElementById('text-input-id-1-error2').classList.remove('slds-show');
+                        document.getElementById('text-input-id-1-error').classList.add('slds-show');
+                        validEmail = false;
+                        document.getElementById('page:form:EmailTrusteeBtn').disabled = true;
+                        return false;
+                    }else{
+                        debugger;
+                        document.getElementById('emailInputDiv').classList.remove('slds-has-error');
+                        document.getElementById('text-input-id-1-error').classList.remove('slds-show');
+                        document.getElementById('text-input-id-1-error2').classList.remove('slds-show');
+                        finalEmail.push(x);
+                        validEmail = true;
+                    }
+                }
+            }
+            
+            // validate email address format is entered correctly or not
+            function validateToEmail(){
+                timeout = setTimeout(function () {
+                    validateEmail();
+                    debugger;
+                    if(validEmail == true)
+                        validateSendEmailButton();
+                }, 0);
+            }
+            
+            function validateForm() {
+                validateEmailMessage();
+                validateSubject();
+                validateEmail();
+            }
+            
+            // function to check whether email sent successfully or not
+            function target(){
+                console.log('isAmemdedClaim');
+                var checkVal = document.getElementById('page:form:hiddenCheck').value;
+                var docException = document.getElementById('page:form:docException').value;
+                var accStatementError = document.getElementById('page:form:accStatementError').value;
+                var attachSizeException = document.getElementById('page:form:attachSizeException').value;
+                var isAmemdedClaim = document.getElementById('page:form:isAmemdedClaim').value;
+                var isPocRequired = document.getElementById('page:form:isPocRequired').value;
+                
+               
+                    if(docException == 'true'){
+                        element = document.getElementById("docExceptionMessage");
+                        unfade(element);
+                        document.getElementById('page:form:EmailTrusteeBtn').disabled = false;
+                        return;
+                    }
+                else{
+                    document.getElementById("docExceptionMessage").style.display = 'none';
+                }
+                
+                if(accStatementError == 'true'){
+                    element = document.getElementById("accStatementErrorMessage");
+                    unfade(element);
+                    document.getElementById('page:form:EmailTrusteeBtn').disabled = false;
+                    return;
+                }
+                else{
+                    document.getElementById("accStatementErrorMessage").style.display = 'none';
+                }
+                
+                if(attachSizeException == 'true'){
+                    element = document.getElementById("attachSizeExceptionMessage");
+                    unfade(element);
+                    document.getElementById('page:form:EmailTrusteeBtn').disabled = false;
+                    return;
+                }
+                else{
+                    document.getElementById("attachSizeExceptionMessage").style.display = 'none';
+                }
+                
+                if(isAmemdedClaim == 'true'){
+                    element = document.getElementById("isAmemdedClaimException");
+                    unfade(element);
+                    document.getElementById('page:form:EmailTrusteeBtn').disabled = false;
+                    return;
+                }
+                else{
+                    document.getElementById("isAmemdedClaimException").style.display = 'none';
+                }
+                
+                if(isPocRequired == 'true'){
+                    console.log('innsnnsa');
+                    element = document.getElementById("isPocRequiredException");
+                    unfade(element);
+                    document.getElementById('page:form:EmailTrusteeBtn').disabled = false;
+                    return;
+                }
+                else{
+                    document.getElementById("isPocRequiredException").style.display = 'none';
+                }
+                
+                var element = document.getElementById("target");
+                if(checkVal  == 'true'){
+                    element = document.getElementById("exception");
+                }  
+                
+                unfade(element);
+                
+                if (checkVal  == 'true'){
+                    document.getElementById('page:form:EmailTrusteeBtn').disabled = false;
+                }
+                else{
+                    setTimeout(function(){
+                        window.close();
+                    }, 2000);
+                }
+            }
+            
+            // validates email address format entered by user
+            function ValidateEmail(mail)   
+            {  
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,7})+$/.test(mail))  
+                {  
+                    return (true)  
+                }   
+                return (false)  
+            }  
+            
+            // close window after successfully sent email
+            function closeWindow(){
+                window.close();
+            }
+            
+            function fade(element, t) {
+                setTimeout(
+                    function() {
+                        var op = 1;  // initial opacity
+                        var timer = setInterval(function () {
+                            if (op <= 0.1){
+                                clearInterval(timer);
+                                element.style.display = 'none';
+                            }
+                            element.style.opacity = op;
+                            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                            op -= op * 0.1;
+                        }, 50);
+                    }, t);
+                
+            }
+            
+            function unfade(element) {
+                var op = 0.1;  // initial opacity
+                element.style.display = 'block';
+                var timer = setInterval(function () {
+                    if (op >= 1){
+                        clearInterval(timer);
+                    }
+                    element.style.opacity = op;
+                    element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                    op += op * 0.1;
+                }, 0);
+            }
+            
+            // to check whether user has connected to network or not
+            function validateAtt(){
+                document.getElementById('page:form:EmailTrusteeBtn').disabled = true;
+                var online = navigator.onLine;
+                if(online == false){
+                    var element = document.getElementById("noInternet");
+                    unfade(element);
+                    return false;
+                }else{
+                    sendEmail(); 
+                    return true;
+                }
+            }
+            
+            // function when attachment is selected un unselected
+            function fileOptionchanged(ele, attId){
+                if(ele.checked == true)
+                    attachmentSelected(attId);
+                else
+                    attachmentRemoved(attId);
+                
+            }
+            </script>
+        </head>
+        <apex:outputPanel id="notifier">
+            <!---------------- Successfull message when email sent sucessfully to user ------------------>
+            <div class="slds-notify_container success-notifier slds-hide"  id="target">
+                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override">Email sent successfully</span>
+                    <h2>
+                        <div class="slds-text-heading--medium"></div>
+                    </h2>
+                </div>
+            </div>
+            
+            <!---------------- Error message when Service Nova Scotia select Account Statement type attachment ------------------>
+            <div class="slds-notify_container success-notifier slds-hide"  id="accStatementErrorMessage">
+                <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override" id = "exceptionMsg">'Account Statement' type attachment cannot be sent for Customer</span>
+                    <h2>
+                        <div class="slds-text-heading--medium"></div>
+                    </h2>
+                </div>
+            </div>
+            
+            <!---------------- Message when email not sent and any erros while sending to user ------------------>
+            <div class="slds-notify_container success-notifier slds-hide"  id="exception">
+                <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override" id="exceptionMsg">There was an error sending your email; please contact the System Administrator for more information and resolution</span>
+                </div>
+            </div>
+            
+            <div class="slds-notify_container success-notifier slds-hide"  id="isAmemdedClaimException">
+                <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override" id="exceptionMsg">Amended Claim is not true</span>
+                </div>
+            </div>
+            
+            <div class="slds-notify_container success-notifier slds-hide"  id="isPocRequiredException">
+                <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override" id="exceptionMsg">Application account status is not 'No poc required'</span>
+                </div>
+            </div>
+            
+            <!---------------- Message when user sent email without PoC Document------------------>
+            <div class="slds-notify_container success-notifier slds-hide"  id="docExceptionMessage">
+                <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override" id="exceptionMsg">Please select PoC Document before sending email</span>
+                </div>
+            </div>
+            
+            <!---------------- Message when user sent email with attachments larger than allowed ------------------>
+            <div class="slds-notify_container success-notifier slds-hide"  id="attachSizeExceptionMessage">
+                <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override" id="exceptionMsg">{!attachSizeExceptionMessage}</span>
+                </div>
+            </div>
+            
+            <!---------------- Error message when user not connected to internet ------------------>
+            <div class="slds-notify_container success-notifier slds-hide"  id="noInternet">
+                <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                    <span class="slds-assistive-text-override">You are not connected to internet, please connect and try again.</span>
+                    <h2>
+                        <div class="slds-text-heading--medium"></div>
+                    </h2>
+                </div>
+            </div>
+            
+            <apex:form id="form" styleClass="slds-box">
+                
+                <apex:inputHidden value="{!isAnyException}" id="hiddenCheck"/>
+                <apex:inputHidden value="{!docException}" id="docException"/>
+                <apex:inputHidden value="{!accStatementError}" id="accStatementError"/>
+                <apex:inputHidden value="{!attachSizeException}" id="attachSizeException"/>
+                <apex:inputHidden value="{!isPocRequired}" id="isPocRequired"/>
+                <apex:inputHidden value="{!isAmemdedClaim}" id="isAmemdedClaim"/>
+                <apex:inputHidden value="{!isActive}" id="isActive"/>
+                <apex:ActionFunction name="sendEmail"  action="{!sendEmail}" oncomplete="target();" status="spinner" reRender="pageMsg, hiddenCheck, isAmemdedClaim, isPocRequired, docException,accStatementError, attachSizeException,msg"/>
+                <apex:ActionFunction name="emailTemplatechanged"  action="{!emailTemplatechanged}" oncomplete="validateForm();"  reRender="form" status="spinner"/>
+                <apex:ActionFunction name="attachmentSelected"  action="{!attachmentSelected}" reRender="none" status="spinner">
+                    <apex:param name="attachmentSelected" value="attachmentSelected" assignTo="{!attachmentSelected}"/>
+                </apex:ActionFunction>
+                <apex:ActionFunction name="attachmentRemoved"  action="{!attachmentRemoved}" reRender="none" status="spinner">
+                    <apex:param name="attachmentRemoved" value="attachmentRemoved" assignTo="{!attachmentSelected}"/>
+                </apex:ActionFunction>
+                
+                <apex:ActionStatus id="spinner">
+                    <apex:facet name="start">
+                        <div class="slds-spinner_container">
+                            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </apex:facet>
+                </apex:ActionStatus>
+                
+                <article class="slds-card stripes-grey slds-m-top_small">
+                    
+                    <div class="slds-p-around_small stripes-grey">
+                       
+                        <div class="slds-media__body">
+                            <h2>
+                                <span class="slds-text-heading_small">{!application.Name} - Attachments  ({!applicationAttachList.size})</span>
+                            </h2>
+                            <div class="via-border-radius stripes-grey via-border-corner-shapes">
+                                <div class="slds-p-around_medium slds-grid slds-wrap slds-truncate slds-theme--default via-border-corner-shapes">
+                                    
+                                    <div class="slds-size_1-of-2 slds-medium-size_1-of-6 slds-large-size_2-of-12 slds-p-bottom_small" style="text-align:right;">
+                                        <p class="slds-tile slds-size--1-of-2 slds-truncate slds-text-heading--label" style="line-height: 2rem;">To</p>
+                                    </div>
+                                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_5-of-6 slds-large-size_10-of-12" id="emailInputDiv">
+                                        <apex:inputText id="text-input-id-1" value="{!toEmail}" styleClass="slds-input email" onblur="validateToEmail()"/>
+                                        <p id="text-input-id-1-error" class=" slds-hide slds-p-bottom_small" style="color: #E01933 !important;">Please provide a valid email address</p>
+                                        <p id="text-input-id-1-error2" class="slds-hide slds-p-bottom_small" style="color: #E01933 !important;">Please provide a valid email address</p>
+                                    </div>
+                                    
+                                    <div class="slds-size_1-of-2 slds-medium-size_1-of-6 slds-large-size_2-of-12 slds-p-bottom_small" style="text-align:right;">
+                                        <p class="slds-tile slds-size--1-of-2 slds-truncate slds-text-heading--label" style="line-height: 2rem;">Template</p>
+                                        
+                                    </div>
+                                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_5-of-6 slds-large-size_10-of-12" id="templateInputDiv">
+                                        
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-select_container">
+                                                    <apex:selectList size="1" value="{!selectedTemplate}" styleClass="slds-select" onchange="emailTemplatechanged()">
+                                                        <apex:selectOptions value="{!templates}"/>
+                                                        
+                                                    </apex:selectList>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="slds-size_1-of-2 slds-medium-size_1-of-6 slds-large-size_2-of-12 slds-p-bottom_small" style="text-align:right;">
+                                        <p class="slds-tile slds-size--1-of-2 slds-truncate slds-text-heading--label" style="line-height: 2rem;">Subject</p>
+                                        
+                                    </div>
+                                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_5-of-6 slds-large-size_10-of-12" id="subjectInputDiv">
+                                        <apex:inputText id="text-input-id-2" value="{!subject}"  styleClass="slds-input emailSubject"  onkeyup="validateSubject();"/>
+                                        <p id="text-input-id-3-error" class=" slds-hide slds-p-bottom_small" style="color: #E01933 !important;">Please provide a subject for this email</p>
+                                    </div>
+                                    
+                                    <div class="slds-size_1-of-2 slds-medium-size_1-of-6 slds-large-size_2-of-12" style="text-align:right;">
+                                        <p class="slds-tile slds-size--1-of-2 slds-truncate slds-text-heading--label" style="line-height: 2rem;">Email Body</p>
+                                    </div>
+                                    <div class="slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_5-of-6 slds-large-size_10-of-12" id="messageInputDiv">
+                                        <apex:outputText id="text-input-id-header" value="{!htmlEmailheader }" escape="false" />
+                                        <apex:inputTextarea rows="12" id="text-input-id-3" value="{!emailBody }" style="float: left; boder-radius:0px;" styleClass="slds-textarea emailMessage" onkeyup="validateEmailMessage();"/>
+                                        
+                                        <p id="text-input-id-4-error" class="slds-hide slds-p-bottom_small" style="color: #E01933 !important; float:left; clear: both;">Please provide a message body for this email</p>
+                                        <apex:outputText style="clear:both;float: left;"  id="text-input-id-footer" value="{!htmlEmailFooter}" escape="false" />
+                                    </div>
+                                </div>
+                                
+                                <div style="height: 40px;" class="slds-p-left_medium  slds-border_top slds-theme_shade">
+                                    Please select the attachments that needs to be sent to trustee 
+                                </div>
+                                <table class="slds-table slds-table_bordered slds-table_cell-buffer" style="border: 0px !important;">
+                                    <tbody>
+                                        <Apex:repeat value="{!applicationAttachList}" var="insolvAtt">
+                                            <tr  scope="row" class="via-border-bottom-corners">
+                                                <td data-label="Att">
+                                                    <apex:inputCheckbox styleClass="my-checkbox" html-name="options" id="att"  value="{!insolvAtt.selected}" onchange="fileOptionchanged(this, '{!insolvAtt.attId}')"></apex:inputCheckbox>
+                                                    <apex:outputLabel for="divsup" styleClass="slds-checkbox__label">
+                                                        <span class="slds-checkbox--faux"></span>
+                                                        <span class="slds-form-element__label">{!insolvAtt.fileName}</span>
+                                                    </apex:outputLabel>
+                                                </td>
+                                                <td>
+                                                    <apex:outputText value="{!insolvAtt.fileDesc}" />
+                                                </td>
+                                                <td>
+                                                    <apex:outputText value="{!insolvAtt.displaySize}" />
+                                                </td>   
+                                                <td>
+                                                    <apex:outputText value="{0, date, MMMM d',' yyyy hh:mm a}" >
+                                                        <apex:param value="{!insolvAtt.fileCreatedDate}" />
+                                                    </apex:outputText>
+                                                </td>
+                                            </tr>
+                                        </Apex:repeat>
+                                    </tbody>
+                                </table>
+                                
+                                <div class="slds-grid slds-p-around_medium slds-border_top slds-theme--default via-border-bottom-corners">
+                                    <div class="slds-col slds-align_absolute-center">
+                                        <apex:actionStatus id="AddStatus">
+                                            <apex:facet name="start">
+                                                <div class="slds-spinner_container">
+                                                    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                                        <span class="slds-assistive-text">Loading</span>
+                                                        <div class="slds-spinner__dot-a"></div>
+                                                        <div class="slds-spinner__dot-b"></div>
+                                                    </div>
+                                                </div>
+                                            </apex:facet>
+                                            <apex:facet name="stop"> 
+                                                <apex:commandButton id="EmailTrusteeBtn"  onclick=" validateAtt();"  styleclass="slds-button slds-button_neutral" value="Email Trustee"  reRender="mmm" status="AddStatus" rendered="{!isActive}"/>
+                                            </apex:facet>
+                                        </apex:actionStatus>
+                                        
+                                        <input type="button" onclick="closeWindow();" class="slds-button slds-button_neutral" value="Cancel"/>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </apex:form>
+        </apex:outputPanel>
+    </html>
+</apex:page>

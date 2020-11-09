@@ -64,5 +64,33 @@ public class Utilities {
       String securedCardAppName = 'APP'+ seqNo;
       return securedCardAppName;
     }
+
+    //Utility method to convert Attachment size from bytes to KB or MB or GB
+    public static String fileSizeToString(Long value){
+        
+        //Representation of Attachment Size in KB,MB,GB 
+        if (value < 1024){
+            return string.valueOf(value) + ' Bytes';
+        }            
+        else if (value >= 1024 && value < (1024*1024)){
+            //Convert Attachment Size from Bytes to KB
+            Decimal kb = Decimal.valueOf(value);
+            kb = kb.divide(1024,2);
+            return string.valueOf(kb) + ' KB';
+        }
+        else if (value >= (1024*1024) && value < (1024*1024*1024)){
+            //Convert Attachment Size from Bytes to MB
+           Decimal mb = Decimal.valueOf(value);
+           mb = mb.divide((1024*1024),2);
+           return string.valueOf(mb) + ' MB';
+        }
+        else {
+            //Convert Attachment Size from Bytes to GB
+            Decimal gb = Decimal.valueOf(value);
+            gb = gb.divide((1024*1024*1024),2);
+             
+            return string.valueOf(gb) + ' GB';
+        }    
+    }
         
  }

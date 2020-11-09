@@ -98,7 +98,15 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ApplicationFormController</apexClass>
+        <apexClass>ApplicationDocController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ApplicationVerificationController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AttachmentClass</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -179,6 +187,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>DummyUtilitiesTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>EmailTrusteeController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>FileUploadController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -1359,6 +1375,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Application__c.Remaining_Balance__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Application__c.Requested_Credit_Limit__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -1500,6 +1521,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Application__c.strategy_tier__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Attachment_Document_Type__mdt.Document_type__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3143,6 +3169,9 @@
         <readable>false</readable>
     </fieldPermissions>
     <layoutAssignments>
+        <layout>Attachment_Document_Type__mdt-Attachment Document Type Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>CardPaymentMethod-Card Payment Method Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -3185,7 +3214,15 @@
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>
+        <apexPage>ApplicationDoc</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
         <apexPage>ApplicationForm</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>ApplicationVerification</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>
@@ -3222,6 +3259,10 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>CustomerCollections</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>EmailTrustee</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>

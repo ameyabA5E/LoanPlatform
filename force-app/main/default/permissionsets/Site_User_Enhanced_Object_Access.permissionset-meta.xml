@@ -898,6 +898,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Application__c.Remaining_Balance__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Application__c.Requested_Credit_Limit__c</field>
         <readable>false</readable>
     </fieldPermissions>

@@ -1,0 +1,64 @@
+<aura:component
+                controller="FileUploadController" 
+                implements="flexipage:availableForAllPageTypes,force:appHostable,force:hasRecordId">
+    <!-- 'parentId' Aura Attribute for store the Id for Parent Record where we are attach our file -->
+    <aura:attribute name="parentId" type="Id" default="" />
+    <!-- 'showLoadingSpinner' attribute for show/hide the uploading image and msg in aura:if-->
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+    <!-- 'fileName' attribute for display the selected file name -->
+    <aura:attribute name="fileName" type="String" default="No File Selected.." />
+    <aura:attribute name="listDocType" type="String[]" default="--None--" />
+    <aura:attribute name="listMonth" type="String[]" default="--None--" />
+    <aura:attribute name="listYear" type="String[]" default="--None--" />
+    <aura:attribute name="switch" type="boolean" default="true" />
+    <!--<aura:attribute name="Uploadbttn" type="boolean" default="true" />-->
+    <!-- Initialize the lists -->
+    <aura:handler name="init" value="{! this }" action="{! c.doinit }" />
+    <aura:handler event="force:refreshView" action="{! c.doinit }" />
+    <!--<c:AttachmentInlineEdit aura:id="child" />-->
+    
+    <!-- Lightning Input with file type and on file change call the 'handleFilesChange' controller -->
+    <lightning:select name="documentType" aura:id="documentType" label="Document Type" value='' required="true">
+        <aura:iteration items="{!v.listDocType}" var="ac">
+            <Option text="{!ac}" value="{!ac}"/>
+        </aura:iteration>
+    </lightning:select>
+    <lightning:select aura:id="month" name="month" label="Month" >
+        <aura:iteration items="{!v.listMonth}" var="ac">
+            <Option text="{!ac}" value="{!ac}"/>
+        </aura:iteration>
+    </lightning:select>    
+    <lightning:select  aura:id="year"
+name="year" label="Year" >
+    	<aura:iteration items="{!v.listYear}" var="ac">
+            <Option text="{!ac}" value="{!ac}"/>
+        </aura:iteration>
+    </lightning:select>
+    <lightning:input
+                     aura:id="fileId"
+                     onchange="{!c.handleFilesChange}"
+                     type="file"
+                     name="file"
+                     label="Upload Attachment"
+                     multiple="false"
+                     />
+    <div class="slds-text-body_small slds-text-color_error">{!v.fileName} </div>
+    
+    <!--use aura:if for show-hide the loading spinner image-->
+    <aura:if isTrue="{!v.showLoadingSpinner}">
+        <div class="slds-text-body_small slds-text-color_error"
+             >Uploading...
+            <img
+                 src="/auraFW/resources/aura/images/spinner.gif"
+                 class="spinner-img"
+                 alt="Loading"
+                 />
+        </div>
+    </aura:if>
+    
+    <br />  
+    <button class="slds-button slds-button_brand" name="callChild" onclick="{!c.uploadAttch}"
+            >Upload Attachment</button> 
+     <c:AttachmentInlineEdit recordId="{!v.recordId}" aura:id="childcomp" />
+
+</aura:component>
