@@ -23,7 +23,7 @@
                     <span>
                         It looks like this link has expired.
                         <br/>
-                        Please call us at 1-855-220-7531 and we will send you a new link.
+                        Please call us at 1-234-567-8910 and we will send you a new link.
                     </span>
                  </div>   
             </apex:outputPanel>

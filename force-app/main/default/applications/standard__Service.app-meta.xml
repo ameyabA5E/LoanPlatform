@@ -12,8 +12,6 @@
     <tabs>standard-report</tabs>
     <tabs>standard-Dashboard</tabs>
     <tabs>Application__c</tabs>
-    <tabs>API_Error__c</tabs>
     <tabs>Product__c</tabs>
     <tabs>Funding_Batch__c</tabs>
-    <tabs>Release_Funds</tabs>
 </CustomApplication>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CSR_Manual_Review_Reason__c</fullName>
+    <externalId>false</externalId>
+    <label>CSR Manual Review Reason</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>No Hit – Adjudication</fullName>
+                <default>false</default>
+                <label>No Hit – Adjudication</label>
+            </value>
+            <value>
+                <fullName>No Hit – AML</fullName>
+                <default>false</default>
+                <label>No Hit – AML</label>
+            </value>
+            <value>
+                <fullName>System Not Reachable – Adjudication</fullName>
+                <default>false</default>
+                <label>System Not Reachable – Adjudication</label>
+            </value>
+            <value>
+                <fullName>System Not Reachable - AML</fullName>
+                <default>false</default>
+                <label>System Not Reachable - AML</label>
+            </value>
+            <value>
+                <fullName>System Exception</fullName>
+                <default>false</default>
+                <label>System Exception</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

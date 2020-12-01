@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Permanent_Address_PostalCode__c</fullName>
     <externalId>false</externalId>
-    <label>Permanent Address PostalCode</label>
+    <label>Permanent Address Postal Code</label>
     <length>10</length>
     <required>false</required>
     <trackHistory>true</trackHistory>

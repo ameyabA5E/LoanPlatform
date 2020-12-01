@@ -4,7 +4,7 @@
  *
  *  @description : This is used for Application record Verification 
  *  @author : A5E Consulting
- *  @date : 07/14/2020
+ *  @date : 11/11/2020
  
  *************************************************************************************************/
  
@@ -44,15 +44,15 @@ public without sharing class ApplicationVerificationController {
             
             if (application != null) { 
                 // Verification process already complete    
-                /*if(application.Verification_Status__c == VERIFICATION_STATUS_VERIFIED){
+                if(application.Verification_Status__c == VERIFICATION_STATUS_VERIFIED){
                     alreadyVerified = True; 
-                }*/
+                }
                 
                 // Check if email expired
-                /*else if (Datetime.now() > application.Verification_Expiration_Date__c) {
+                else if (Datetime.now() > application.Verification_Expiration_Date__c) {
                     // Expired (handle error case)
                     emailVerificationError = true;
-                } */                   
+                }                    
                 
             } 
             else {
@@ -68,13 +68,13 @@ public without sharing class ApplicationVerificationController {
         if (emailVerificationError == false && alreadyVerified == false) {
         
             //Update application
-            	//application.Verification_Status__c = VERIFICATION_STATUS_VERIFIED;
-            	//application.Verification_Completion_Date__c = Datetime.now();
+            application.Verification_Status__c = VERIFICATION_STATUS_VERIFIED;
+            application.Verification_Completion_Date__c = Datetime.now();
             
             try{
-                /*ApplicationTriggerHandler.runApplicationLoadTrigger = false;
+                //ApplicationTriggerHandler.runApplicationLoadTrigger = false;
                 update application;
-                ApplicationTriggerHandler.runApplicationLoadTrigger = true;*/
+                //ApplicationTriggerHandler.runApplicationLoadTrigger = true;
                 
                 //alreadyVerified = true;
             }
@@ -89,9 +89,8 @@ public without sharing class ApplicationVerificationController {
     
     // Fetching Application with Verification Token
     public Application__c getApplicationByVerificationToken(String vat) { 
-        /*List<Application__c> applications = [SELECT Id, Verification_Expiration_Date__c, Verification_Sent_Date__c, Verification_Status__c, Verification_Auth_Token__c FROM Application__c WHERE Verification_Auth_Token__c =: vat];
+        List<Application__c> applications = [SELECT Id, Verification_Expiration_Date__c, Verification_Sent_Date__c, Verification_Status__c, Verification_Auth_Token__c FROM Application__c WHERE Verification_Auth_Token__c =: vat];
         
-        return (applications.size() > 0) ? applications[0] : null;*/
-        return null;
+        return (applications.size() > 0) ? applications[0] : null;
     }
 }

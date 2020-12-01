@@ -25,11 +25,6 @@
         <value>Megasys</value>
     </filters>
     <filters>
-        <field>Funding_Status__c</field>
-        <operation>equals</operation>
-        <value>Manually Funded,Funded</value>
-    </filters>
-    <filters>
         <field>Effective_Next_Payment_Date__c</field>
         <operation>equals</operation>
         <value>NEXT_N_DAYS:2</value>

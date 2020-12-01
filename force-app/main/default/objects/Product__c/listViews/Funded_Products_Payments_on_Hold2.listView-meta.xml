@@ -11,7 +11,6 @@
     <columns>Override_Payment_Amount__c</columns>
     <columns>NSF_Fee_Amount_Outstanding__c</columns>
     <columns>Hold_Payments__c</columns>
-    <columns>Funding_Status__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Charged_Off_Date__c</field>
@@ -20,11 +19,6 @@
     <filters>
         <field>Closed_Date__c</field>
         <operation>equals</operation>
-    </filters>
-    <filters>
-        <field>Funding_Status__c</field>
-        <operation>equals</operation>
-        <value>Manually Funded,Funded</value>
     </filters>
     <filters>
         <field>Hold_Payments__c</field>

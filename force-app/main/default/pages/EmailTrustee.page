@@ -223,7 +223,7 @@
                 if(checkVal  == 'true'){
                     element = document.getElementById("exception");
                 }  
-                
+                console.log('checkVal '+checkVal);
                 unfade(element);
                 
                 if (checkVal  == 'true'){
@@ -307,7 +307,7 @@
         </head>
         <apex:outputPanel id="notifier">
             <!---------------- Successfull message when email sent sucessfully to user ------------------>
-            <div class="slds-notify_container success-notifier slds-hide"  id="target">
+            <div class="slds-notify_container success-notifier"  id="target" style="display:none;">
                 <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
                     <span class="slds-assistive-text-override">Email sent successfully</span>
                     <h2>
@@ -502,7 +502,7 @@
                                                 </div>
                                             </apex:facet>
                                             <apex:facet name="stop"> 
-                                                <apex:commandButton id="EmailTrusteeBtn"  onclick=" validateAtt();"  styleclass="slds-button slds-button_neutral" value="Email Trustee"  reRender="mmm" status="AddStatus" rendered="{!isActive}"/>
+                                                <apex:commandButton id="EmailTrusteeBtn"  onclick=" validateAtt();"  styleclass="slds-button slds-button_neutral" value="Email Customer"  reRender="mmm" status="AddStatus" rendered="{!isActive}"/>
                                             </apex:facet>
                                         </apex:actionStatus>
                                         

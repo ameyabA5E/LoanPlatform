@@ -45,6 +45,16 @@
                 <default>false</default>
                 <label>Archived</label>
             </value>
+            <value>
+                <fullName>Manually Approved</fullName>
+                <default>false</default>
+                <label>Manually Approved</label>
+            </value>
+            <value>
+                <fullName>Manually Rejected</fullName>
+                <default>false</default>
+                <label>Manually Rejected</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

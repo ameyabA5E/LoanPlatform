@@ -11,7 +11,6 @@
     <columns>Override_Payment_Amount__c</columns>
     <columns>NSF_Fee_Amount_Outstanding__c</columns>
     <columns>Hold_Payments__c</columns>
-    <columns>Funding_Status__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Charged_Off_Date__c</field>

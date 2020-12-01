@@ -180,14 +180,9 @@
     <tabs>standard-Opportunity</tabs>
     <tabs>standard-Lead</tabs>
     <tabs>Application__c</tabs>
-    <tabs>API_Error__c</tabs>
     <tabs>Product__c</tabs>
     <tabs>Funding_Batch__c</tabs>
-    <tabs>Release_Funds</tabs>
     <workspaceConfig>
-        <mappings>
-            <tab>API_Error__c</tab>
-        </mappings>
         <mappings>
             <tab>Application__c</tab>
         </mappings>
@@ -196,9 +191,6 @@
         </mappings>
         <mappings>
             <tab>Product__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Release_Funds</tab>
         </mappings>
         <mappings>
             <tab>standard-Account</tab>

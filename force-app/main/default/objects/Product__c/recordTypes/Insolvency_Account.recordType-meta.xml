@@ -89,44 +89,6 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Funding_Status__c</picklist>
-        <values>
-            <fullName>Funded</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Funding Failed</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Manually Funded</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pending</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Released Batch</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>Funding_Type__c</picklist>
-        <values>
-            <fullName>Automated</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Manual</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Released</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>Last_Payment_Status__c</picklist>
         <values>
             <fullName>Fail</fullName>

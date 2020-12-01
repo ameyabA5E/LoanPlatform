@@ -7,13 +7,7 @@
     <columns>Funding_Date__c</columns>
     <columns>VersaPay_State__c</columns>
     <columns>Last_State_Changed_Date__c</columns>
-    <columns>Funding_Status__c</columns>
     <filterScope>Everything</filterScope>
-    <filters>
-        <field>Funding_Status__c</field>
-        <operation>equals</operation>
-        <value>Pending,Funding Failed,Released Batch</value>
-    </filters>
     <filters>
         <field>Loan_Type__c</field>
         <operation>equals</operation>

@@ -66,6 +66,7 @@ global class EmailTrusteeController{
         attachSizeExceptionMessage = config.Maximum_Email_Attachments_Size_Text__c;
         
         application = [SELECT Id, Name,
+        First_Name__c, Last_Name__c,Remaining_Balance__c,
                      Customer__c,
                      Customer__r.Communication_Preference__pc,
                      Customer__r.Fax, 
@@ -159,6 +160,15 @@ global class EmailTrusteeController{
             subject = emt.subject;
             if(subject != null){
                 // replace any merge fields
+                if(subject.contains('{!Application__c.Name}')){
+                    subject = subject.replace('{!Application__c.Name}', application.Name);    
+                }
+                if(subject.contains('{!Application__c.First_Name__c}')){
+                    subject = subject.replace('{!Application__c.First_Name__c}', application.First_Name__c);    
+                }
+                if(subject.contains('{!Application__c.Last_Name__c}')){
+                    subject = subject.replace('{!Application__c.Last_Name__c}', application.Last_Name__c);    
+                }
             }
             emailBody = emt.body;
             emailName = emt.Name;
@@ -177,12 +187,22 @@ global class EmailTrusteeController{
             
             // replace all merge fields that are in email template
             if (emailBody != null){
-                if(emailBody.contains('{!Insolvency__r.Name}')){
-                    emailBody = emailBody.replace('{!Insolvency__r.Name}', application.Customer__r.Name);    
+                
+                if(emailBody.contains('{!Application__c.First_Name__c}')){
+                    emailBody = emailBody.replace('{!Application__c.First_Name__c}', application.First_Name__c);    
                 }
-                // if(emailBody.contains('{!pocPackage.CFG_Office_Address__c}')){       
-                //     emailBody = emailBody.replace('{!pocPackage.CFG_Office_Address__c}',(pocPackage.CFG_Office_Address__c!= null ? pocPackage.CFG_Office_Address__c:''));         
-                // }
+                if(emailBody.contains('{!Application__c.Last_Name__c}')){
+                    emailBody = emailBody.replace('{!Application__c.Last_Name__c}', application.Last_Name__c);    
+                }
+                if(emailBody.contains('{!Application__c.Remaining_Balance__c}')){       
+                    emailBody = emailBody.replace('{!Application__c.Remaining_Balance__c}', String.valueOf(application.Remaining_Balance__c));         
+                }
+                if(emailBody.contains('{!User.FirstName}')){       
+                    emailBody = emailBody.replace('{!User.FirstName}', UserInfo.getFirstName());         
+                }
+                if(emailBody.contains('{!User.LastName}')){       
+                    emailBody = emailBody.replace('{!User.LastName}', UserInfo.getFirstName());         
+                }
             }  
             
             system.debug('insolTemplateWithHeaderList=='+insolTemplateWithHeaderList);

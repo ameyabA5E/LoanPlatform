@@ -81,7 +81,7 @@ public with sharing class TestRecordsFactory {
     }
     
     //Utility method to create Attchment record
-    public static void attchmentCreate(Application__c refreshApp){
+    public static void attchmentCreate(Application__c refreshApp, String description){
         
         Attachment attach=new Attachment(); 
         attach.Name='Unit Test Attachment'; 
@@ -90,13 +90,13 @@ public with sharing class TestRecordsFactory {
         attach.parentId=refreshApp.Id; 
         attach.ContentType = 'application/msword'; 
         attach.IsPrivate = false; 
-        attach.Description = 'Test'; 
+        attach.Description = description; 
         insert attach; 
     }  
     
     //Create TCI Job Setting Records
     public static void createTciCSRecords(){
-        
+        /*
         TCI_Job_Setting__c tcijobCS = New TCI_Job_Setting__c();
         tcijobCS.Account_ID_Prefix__c = 'PeoplesCA';
         tcijobCS.Agency_Name__c = 'AEOX'; 
@@ -110,7 +110,7 @@ public with sharing class TestRecordsFactory {
         tcijobCS.Privacy_Policy__c = 'YES';
         tcijobCS.Skip_Delete_Days__c = 30;
         tcijobCS.Total_Due__c = 0;
-        insert tcijobCS;
+        insert tcijobCS;*/
     }
     
     //Create CSR User
@@ -136,4 +136,92 @@ public with sharing class TestRecordsFactory {
         insert uzer;
         return uzer;       
     }
+
+    // Create Application settings metadata
+    public static Application_Configuration_Settings__c createApplicationMetadata(){
+        Application_Configuration_Settings__c appConfig = new Application_Configuration_Settings__c(
+            Domain_Name__c = 'lending.com',
+            Maximum_Email_Attachments_Size__c = 18874368,
+            Maximum_Email_Attachments_Size_Text__c = 'You can send attachments only upto 18 MB');
+        return appConfig;
+    }
+
+    // Create PoC Package_Settings metadata
+    public static Email_Customer_Settings__c createPOCSetting(){
+        Email_Customer_Settings__c poc = new Email_Customer_Settings__c();
+        poc.Email_Org_Wide_Address_Id__c = '0D27F000000kC3e';
+        poc.Account_Statement_Not_Allowed__c = 'noTestAccount';
+        return poc;
+    }
+
+    // Create PoC Package_Settings metadata
+    public static EmailTemplate createEmailTemplateWithoutHeader(){
+        EmailTemplate defaultTemplate = new EmailTemplate(
+                            Name = 'Sample Email - Template',
+                            TemplateType  = 'custom', 
+                            DeveloperName='SampleEMail', 
+                            HtmlValue = '{!Application__c.Name} - {!Application__c.First_Name__c} {!Application__c.Last_Name__c} {!Application__c.Remaining_Balance__c} {!User.FirstName} {!User.LastName}', 
+                            Body = '{!Application__c.Name} - {!Application__c.First_Name__c} {!Application__c.Last_Name__c} {!Application__c.Remaining_Balance__c} {!User.FirstName} {!User.LastName}',
+                            Subject = '{!Application__c.Name} - {!Application__c.First_Name__c} {!Application__c.Last_Name__c}', 
+                            FolderId = UserInfo.getUserId());
+        return defaultTemplate;
+    }
+
+    // Create PoC Package_Settings metadata
+    public static EmailTemplate createEmailTemplateWithHeader(){
+        EmailTemplate defaultTemplate = new EmailTemplate(
+            Name = 'Blank - Template',
+            TemplateType  = 'custom', 
+            DeveloperName='Blank_Template', 
+            HtmlValue = '<html> <body> {!Application__c.Name} - {!Application__c.First_Name__c} {!Application__c.Last_Name__c} {!Application__c.Remaining_Balance__c} {!User.FirstName} {!User.LastName} </body> </html>', 
+            Body = '{!Application__c.Name} - {!Application__c.First_Name__c} {!Application__c.Last_Name__c}',
+            Subject = '{!Application__c.Name} - {!Application__c.First_Name__c} {!Application__c.Last_Name__c}', 
+            FolderId = UserInfo.getUserId());
+        return defaultTemplate;
+    }
+
+    public static User createAdminUser(){
+        UserRole obj=new UserRole(Name= 'ABC'); 
+        insert obj; 
+        
+        Profile pf= [Select Id from profile where Name='System Administrator']; 
+        
+        String orgId=UserInfo.getOrganizationId(); 
+        String dateString=String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+        
+        Integer RandomId=Integer.valueOf(Math.rint(Math.random()*1000000)); 
+        String uniqueName=orgId+dateString+RandomId; 
+        
+        User uu=new User(firstname = 'ABC', 
+        lastName = 'XYZ', 
+        email = uniqueName + '@test' + orgId + '.org', 
+        Username = uniqueName + '@test' + orgId + '.org', 
+        EmailEncodingKey = 'ISO-8859-1', 
+        Alias = uniqueName.substring(18, 23), 
+        TimeZoneSidKey = 'America/Los_Angeles', 
+        LocaleSidKey = 'en_US', 
+        LanguageLocaleKey = 'en_US', 
+        ProfileId = pf.Id, 
+        UserRoleId = obj.Id); 
+        insert uu;
+        return uu;
+    }
+
+    // Create PoC Package_Settings metadata
+    public static ContentVersion createContentVersion(string body){
+        ContentVersion contentVersion = new ContentVersion();
+        contentVersion.ContentLocation = 'S';
+        contentVersion.VersionData = EncodingUtil.base64Decode(body);
+        return contentVersion;
+    }
+
+    public static ContentDocumentLink createContentDocumentLink(Id conDocId, Id linkedEntitiyId){
+        ContentDocumentLink contDocLink = new ContentDocumentLink();
+        contDocLink.ContentDocumentId = conDocId;
+        contDocLink.LinkedEntityId = linkedEntitiyId; // This will link inserted file to above inserted settlement record
+        contDocLink.ShareType = 'I'; 
+        contDocLink.Visibility = 'InternalUsers';
+        return contDocLink;
+    }
+
 }

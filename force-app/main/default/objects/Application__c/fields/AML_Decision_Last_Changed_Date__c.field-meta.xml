@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AML_Decision_Last_Changed_Date__c</fullName>
+    <description>AML Decision Last Changed Date</description>
+    <externalId>false</externalId>
+    <inlineHelpText>AML Decision Last Changed Date</inlineHelpText>
+    <label>AML Decision Last Changed Date</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

@@ -497,14 +497,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Funding_Batch__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Funding_Batch_Number__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Disbursement_Amount__c</field>
             </layoutItems>
             <layoutItems>
@@ -524,14 +516,6 @@
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Funding_Status__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Funding_Type__c</field>
-            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Actual_Date_Funded__c</field>
@@ -586,40 +570,6 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Payment_Amount__c</fields>
-        <fields>VersaPay_State__c</fields>
-        <fields>NSF_Fee_Status__c</fields>
-        <fields>VersaPay_Token_Number__c</fields>
-        <fields>Last_State_Changed_Date__c</fields>
-        <relatedList>VersaPay_Product_Payment__c.Product__c</relatedList>
-        <sortField>Last_State_Changed_Date__c</sortField>
-        <sortOrder>Desc</sortOrder>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>Action__c</fields>
-        <fields>End_Point__c</fields>
-        <fields>Error__c</fields>
-        <fields>Request__c</fields>
-        <fields>Response__c</fields>
-        <relatedList>API_Error__c.Product__c</relatedList>
-        <sortField>NAME</sortField>
-        <sortOrder>Desc</sortOrder>
-    </relatedLists>
-    <relatedLists>
-        <fields>Collection_Title__c</fields>
-        <relatedList>Collection_Notes__c.Product__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <fields>PTP_Amount__c</fields>
-        <fields>PTP_Method__c</fields>
-        <fields>PTP_Date__c</fields>
-        <fields>PTP_Mate__c</fields>
-        <relatedList>PTP_Information__c.Product__c</relatedList>
-    </relatedLists>
     <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>

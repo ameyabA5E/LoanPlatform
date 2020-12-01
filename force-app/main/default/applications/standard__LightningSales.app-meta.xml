@@ -42,9 +42,7 @@
     <tabs>standard-Case</tabs>
     <tabs>standard-Forecasting3</tabs>
     <tabs>Application__c</tabs>
-    <tabs>API_Error__c</tabs>
     <tabs>Product__c</tabs>
     <tabs>Funding_Batch__c</tabs>
-    <tabs>Release_Funds</tabs>
     <uiType>Lightning</uiType>
 </CustomApplication>

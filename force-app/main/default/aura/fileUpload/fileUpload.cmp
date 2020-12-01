@@ -57,8 +57,8 @@ name="year" label="Year" >
     </aura:if>
     
     <br />  
-    <button class="slds-button slds-button_brand" name="callChild" onclick="{!c.uploadAttch}"
-            >Upload Attachment</button> 
-     <c:AttachmentInlineEdit recordId="{!v.recordId}" aura:id="childcomp" />
+    <button class="slds-button slds-button_brand" name="callChild" onclick="{!c.uploadAttch}">Upload Attachment</button> 
+    <br/>
+    <c:AttachmentInlineEdit recordId="{!v.recordId}" aura:id="childcomp" />
 
 </aura:component>

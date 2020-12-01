@@ -45,6 +45,7 @@ public with sharing class FileUploadController {
         insert cDe;
         return cDe.Id;
     }   //Saving Files
+
     private static void appendToFile(Id fileId, String base64Data) {
         base64Data = EncodingUtil.urlDecode(base64Data, 'UTF-8');    
         //Attachment a = [SELECT Id, Body FROM Attachment WHERE Id =: fileId];
@@ -55,7 +56,7 @@ public with sharing class FileUploadController {
     }   
     @AuraEnabled //Fetching Document Names from Custom Setting 
     public static List<String> documentTypeList(){
-        List<String> listDocumentType = new List<String>();
+        List<String> listDocumentType = new List<String>{'--None--'};
         List<Attachment_Document_Type__mdt> attachlistsetting = new List<Attachment_Document_Type__mdt>();
         attachlistsetting =[SELECT MasterLabel, Document_type__c FROM Attachment_Document_Type__mdt order by MasterLabel ASC];
         for( Attachment_Document_Type__mdt alist : attachlistsetting ) {
@@ -86,7 +87,7 @@ public with sharing class FileUploadController {
     public static List<String> yearList(){
         List<String> listDocumentType = new List<String>();
         listDocumentType.add('--None--');
-        for(Integer i =  System.Today().year(); i >= 2000; i--){
+        for(Integer i =  2030; i >= 2000; i--){
             listDocumentType.add(String.valueOf(i));
         }
         system.debug('List of Year : ' + listDocumentType);

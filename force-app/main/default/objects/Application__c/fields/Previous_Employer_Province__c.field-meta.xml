@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Previous_Employer_Province__c</fullName>
     <externalId>false</externalId>
-    <label>Previous Employer State</label>
+    <label>Previous Employer Province</label>
     <length>100</length>
     <required>false</required>
     <trackHistory>false</trackHistory>

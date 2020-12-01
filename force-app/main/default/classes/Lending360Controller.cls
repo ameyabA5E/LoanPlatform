@@ -993,12 +993,13 @@ public /*with sharing*/ class Lending360Controller{
         app.Approved_Amount__c = app.Requested_Credit_Limit__c;
         
         //Email Authentication
-        Datetime current = Datetime.now();
-        String hashString = application.Id + current.formatGmt('yyyyMMddHHmmssSSS');
-        Blob hash = Crypto.generateDigest('MD5', Blob.valueOf(hashString));
-        application.Email_Auth_Token__c = EncodingUtil.convertToHex(hash);
-        application.Email_Authentication_Sent_Date__c = current;
-        application.Email_Authentication_Status__c = 'Sent to Applicant';
+          Datetime current = Datetime.now();
+          String hashString = application.Id + current.formatGmt('yyyyMMddHHmmssSSS');
+          Blob hash = Crypto.generateDigest('MD5', Blob.valueOf(hashString));            
+          application.Verification_Auth_Token__c = EncodingUtil.convertToHex(hash);
+          application.Verification_Sent_Date__c = system.now();
+          application.Verification_Status__c = 'Automated Email Sent';
+          application.Verification_Expiration_Date__c = system.now().addDays(2);
       }
       else if(app.Requested_Credit_Limit__c >= 5000 && app.Requested_Credit_Limit__c < 25000){
         getDecisionBasedonRank(app);
@@ -1097,14 +1098,6 @@ public /*with sharing*/ class Lending360Controller{
         else if(decisionRankPct >= 75){
             app.Decision__c = 'Approved';
             app.Application_Status__c = 'System Approved';
-            
-            //Email Authentication
-            Datetime current = Datetime.now();
-            String hashString = application.Id + current.formatGmt('yyyyMMddHHmmssSSS');
-            Blob hash = Crypto.generateDigest('MD5', Blob.valueOf(hashString));
-            application.Email_Auth_Token__c = EncodingUtil.convertToHex(hash);
-            application.Email_Authentication_Sent_Date__c = current;
-            application.Email_Authentication_Status__c = 'Sent to Applicant';
         }  
       
         app.Approved_Amount__c = (app.Requested_Credit_Limit__c * decisionRankPct) / 100;      

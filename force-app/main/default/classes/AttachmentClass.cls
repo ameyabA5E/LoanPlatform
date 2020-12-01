@@ -8,15 +8,12 @@
 
 *************************************************************************************************/
 public class AttachmentClass {
-    public static List<Attachment> attachmentList {set;get;}
-    public static List<Attachment> attachmentList2 {set;get;}
     public static List<ContentDocumentLink> ConDocLnk{set;get;}
     public static List<ContentDocument> ConDoc{set;get;}
-    public Attachment_Document_Type__mdt attachlistsetting {set;get;}
+    
     @AuraEnabled
     public  static  Map<id,ContentDocument> attachmap {set;get;} 
-    public AttachmentClass(){    
-    }
+
     @AuraEnabled
     public static List<AttachWrapper> getAttachment(Id parentId){
         //system.debug('Parent ID' + parentID);
@@ -76,55 +73,6 @@ public class AttachmentClass {
         }
     } 
     
-    /*public static void updateAttachmentrecord(String jvar, string parentid){
-        system.debug('JSon Format input to Apex'+jvar);
-        Set<Id> recordIds=new Set<Id>{parentid};
-        ConDocLnk= [SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId = :recordIds];
-         // Make a List of ContentDocument IDs
-        List <Id> CDIdList = new List <Id> ();
-        for (ContentDocumentLink nextCDL : ConDocLnk) 
-        {
-            CDIdList.add(nextCDL.ContentDocumentId); 
-        }        
-        ConDoc = [SELECT Id, Title, FileType,Description,CreatedDate,LastModifiedDate FROM ContentDocument WHERE ContentDocument.Id IN :CDIdList];
-        
-        List<AttachWrapper> listWrapper = new List<AttachWrapper>();
-        system.debug('attachmentList2' + attachmentList2);
-       attachmap  = new Map<id,ContentDocument>();
-        for(ContentDocument attach : ConDoc){
-            AttachWrapper wrapRecord = new AttachWrapper(attach);
-          
-            //system.debug('Checkid2' + attach.Id );
-            attachmap.put(attach.Id, attach);
-            //system.debug('Checkattachmap2' + attachmap );
-        } 
-       List<ContentDocument> listCon = new List<ContentDocument>();   
-       List<Attachwrapper> attach = (List<Attachwrapper>)JSON.deserialize(jvar, List<Attachwrapper>.class);
-        system.debug(attach);
-        if(attach.size()>0){ 
-       for(Attachwrapper attwrp : attach ){
-           //System.debug('Outside' + attachmap + attwrp.attachRecord.id);
-           if(attachmap.containsKey(attwrp.attachRecord.id)){
-               System.debug('inside2');
-               string AttchDiscription = attwrp.docType + ';' + attwrp.month + ';' + attwrp.year;
-               if(attwrp.attachRecord.Description!=AttchDiscription){
-                   
-                   ContentDocument attachrec = attwrp.attachRecord;
-                   attachrec.id = attwrp.attachID;
-                   
-                   attachrec.Description= attwrp.docType + ';' + attwrp.month + ';' + attwrp.year;
-                   
-                   listCon.add(attachrec);
-                   
-               }
-               
-           }         
-       } 
-       update listCon;
-        }
-        
-    }//updating files 
-    */
     @AuraEnabled
     public static List<String> getPickListValuesIntoList(){
         

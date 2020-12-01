@@ -1,0 +1,25 @@
+<apex:page showHeader="false" sidebar="false" controller="SendVerificationEmailController" action="{!invokeEmail}">
+<html>
+    
+    <body>  
+        <div>
+            <apex:pageBlock rendered="{!elgibleForEmail == true}">
+                <h2>An email will be triggered and sent to the applicant.</h2>
+            </apex:pageBlock>
+            
+            <apex:pageBlock rendered="{!elgibleForEmail == false && inelgibleReason == NO_EMAIL}">
+                <h2>Email cannot be sent. Applicant has no email on record.</h2>
+            </apex:pageBlock>           
+            
+            <apex:pageBlock rendered="{!elgibleForEmail == false && inelgibleReason == VERIFICATION_ALREADY_COMPLETED}">
+                <h2>Email cannot be sent. Applicant's Verification Process has been already completed.</h2>
+            </apex:pageBlock>
+            
+            <apex:pageBlock rendered="{!elgibleForEmail == false && inelgibleReason == INVALID_APPLICATION_STATUS}">
+                <h2>Email cannot be sent because of the Invalid Application status.</h2>
+            </apex:pageBlock>
+            
+        </div>    
+    </body>
+</html>
+</apex:page>

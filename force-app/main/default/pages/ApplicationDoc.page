@@ -1,250 +1,264 @@
 <apex:page showHeader="false" controller="ApplicationDocController" id="page">
-    <html class="ArialUnicodeMSFont">
-
-    <head>
-        <apex:slds />
-        <style>
-            .justify {
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en" style="background:#d8edff">
+        <head>
+            <style>
+                .justify {
                 text-align: justify;
                 text-justify: inter-word;
-            }
-
-            .indent {
+                }
+                
+                .indent {
                 text-indent: 50px;
-            }
-
-            .caps {
+                }
+                
+                .caps {
                 text-transform: uppercase
-            }
-
-            .custom-Li {
+                }
+                
+                .custom-Li {
                 display: list-item;
                 list-style-position: inside;
                 padding-left: 15px;
-            }
-
-            .alignleft {
+                }
+                
+                .alignleft {
                 float: left;
-            }
-
-            .alignright {
+                }
+                
+                
+                .alignright {
                 float: right;
-            }
-
-            .ArialUnicodeMSFont {
+                }
+                
+                .ArialUnicodeMSFont {
                 font-family: "Arial";
-            }
-
-            .pageSeperator {
+                }
+                
+                .pageSeperator {
                 width: 112%;
                 background-color: #d8edff;
                 height: 10px;
                 margin-left: -6%;
-            }
-
-            .slds-scope h1,
-            .slds-scope h2,
-            .slds-scope h3,
-            .slds-scope h4,
-            .slds-scope h5,
-            .slds-scope h6,
-            .slds-scope td,
-            .slds-scope th {
+                }
+                
+                .slds-scope h1,
+                .slds-scope h2,
+                .slds-scope h3,
+                .slds-scope h4,
+                .slds-scope h5,
+                .slds-scope h6,
+                .slds-scope td,
+                .slds-scope th {
                 font-family: "Arial";
-            }
-
-            .slds-scope {
+                }
+                
+                .slds-scope {
                 color: #000;
-            }
-
-            div.footer {
+                }
+                
+                div.footer {
                 display: block;
                 padding: 5px;
                 text-align: center;
                 position: running(footer);
-            }
-
-            .pagenumber:before {
+                }
+                
+                .pagenumber:before {
                 content: counter(page);
-            }
-
-            .pagecount:before {
+                }
+                
+                .pagecount:before {
                 content: counter(pages);
-            }
-           
-        </style>
-        <script>
+                }
+                .slds-button{
+                font-size: 14px !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+                border: 1px solid #d8dde6 !important;
+                background-color: #fff !important;
+                text-decoration: none !important;
+                color: #0070d2 !important;
+                font-weight: unset !important;
+                }
+                
+                .alert {
+                padding: 10px;
+                background-color: green;
+                color: white;
+                }
+            </style>
+            <script>
             function target() {
                 var element = document.getElementById("target");
-                /*var elementAmend = document.getElementById("amendPOCmessage");
-                unfade(elementAmend);*/
-                var checkVal = document.getElementById('page:form:hiddenCheck').value;
-                if (checkVal == 'true') {
-                    element = document.getElementById("exceptionInPdf");
-                    unfade(element);
-                    return false;
-                }
+               
                 unfade(element);
                 setTimeout(function () {
                     closeWindow();
-                }, 5000);
-
+                }, 3000);
+                
             }
-
-            function closeWindow() {
-                window.close();
-            }
-
-            function unfade(element) {
-                var op = 0.1; // initial opacity
-                element.style.display = 'block';
-                var timer = setInterval(function () {
-                    if (op >= 1) {
-                        clearInterval(timer);
-                    }
-                    element.style.opacity = op;
-                    element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-                    op += op * 0.1;
-                }, 0);
-            }
+        
+        function closeWindow() {
+            
+            sforce.one.navigateToSObject('{!application.Id}', 'detail')
+            
+        }
+        
+        function unfade(element) {
+            var op = 0.1; // initial opacity
+            element.style.display = 'block';
+            var timer = setInterval(function () {
+                if (op >= 1) {
+                    clearInterval(timer);
+                }
+                element.style.opacity = op;
+                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                op += op * 0.1;
+            }, 0);
+        }
+            
            
         </script>
-    </head>
-
-    <apex:form styleClass="ArialUnicodeMSFont" id="form">
-        <apex:inputHidden value="{!isAnyException}" id="hiddenCheck" />
-        <apex:outputPanel id="notifier">
-            <div class="slds-notify_container success-notifier slds-hide" id="target">
-                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert"
-                    style="font-family:Arial !important;">
-                    <span class="slds-assistive-text-override">The proof of claim package has been successfully created
-                        and attached to the Insolvency Account</span>
+        </head>
+        <apex:form styleClass="ArialUnicodeMSFont" id="form" >
+            <div class="slds-notify_container success-notifier slds-hide" style="display:none;"  id="target">
+                <div class="alert">
+                    The document been successfully created and attached to the Application, redirecting to Application
                 </div>
             </div>
-        </apex:outputPanel>
+            
+            
+            <apex:outputPanel id="notifier">
 
+                <body class="slds-scope" style="width:700px;margin: auto; padding-top:10px;">
+                    
+                    <div class="slds-grid slds-m-around_xx-small slds-p-top_medium">
+                        <div class="slds-col slds-align_absolute-center" style="text-align: center;
+                                                                                margin-bottom: 10px;">
+                            <apex:commandButton style="font-family:Arial;font-size: 14px;"
+                                                
+                                                styleclass="slds-button slds-button_neutral" action="{!savePOCDoc}"
+                                                value="Generate Applicaiton PDF" oncomplete="target()" status="spinner" />
+                            <input type="button" style="font-family:Arial;font-size: 14px; ont-family: Arial;
+                                                        /* font-size: 14px; */
+                                                        padding: 0.2rem;
+                                                        border-radius: 2.9px;
+                                                        line-height: 1.1rem;
+                                                        cursor: pointer;"
+                                   class="slds-button slds-button_neutral" onclick="closeWindow();" value="Cancel" />
+                        </div>
+                        <apex:actionStatus id="spinner">
+    <apex:facet name="start">
         <apex:outputPanel >
-            <apex:ActionStatus id="spinner">
-                <apex:facet name="start">
-                    <div class="slds-spinner_container">
-                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                            <span class="slds-assistive-text">Loading</span>
-                            <div class="slds-spinner__dot-a"></div>
-                            <div class="slds-spinner__dot-b"></div>
-                        </div>
+            <img src="/img/loading32.gif" width="25" height="25" />
+            <apex:outputLabel value="Loading..."/>
+        </apex:outputPanel>            
+    </apex:facet>
+</apex:actionStatus>
                     </div>
-                </apex:facet>
-            </apex:ActionStatus>
-            <body class="slds-scope" style="width:700px;margin: auto; background: #d8edff; padding-top:20px;">
-                <div class="slds-grid slds-m-around_xx-small slds-p-top_medium">
-                    <div class="slds-col slds-align_absolute-center">
-                        <apex:commandButton style="font-family:Arial;font-size: 14px;"
-                            styleclass="slds-button slds-button_neutral" action="{!savePOCDoc}"
-                            value="Generate Applicaiton PDF" oncomplete="target()" status="spinner" />
-                        <input type="button" style="font-family:Arial;font-size: 14px;"
-                            class="slds-button slds-button_neutral" onclick="closeWindow();" value="Cancel" />
-                    </div>
-                </div>
-                <article class="slds-card slds-p-top_medium ArialUnicodeMSFont" style="background: #fff;">
-
-                    <div style='font-family: "Arial Unicode MS"; width:86%; margin:auto; font-size:14px;'>
-
-                        <!-- logo -->
-                        <table>
-                            <tr>
-                                <td>
-                                    <div style="text-align:right;padding-top: 20px;">
-                                        <apex:image url="{!$Resource.ApplicaitonPdfLogo}" width="150" height="150" />
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        <br />
-                        <br />
-                        <div class="justify">
-                        A5E Consulting, A -118, First Floor, Lodha Supremus II, Road no 22, Wagle Estate, Thane West,
-                        Thane, Maharashtra 400604</div>
-                        <br /><br />
-
-                        <!-- Appliation name and date -->
-                        <table>
-                            <tr>
-                                <td>
-                                    <div style="clear: both;">
-                                        <p class="alignleft">File No: &nbsp; {!application.Name}</p>
-                                        <p class="alignright">{!todayDate}</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        <br />
-
-                        <!-- customer address -->
-                        <table>
-                            <tr>
-                                <td>
-                                    <tr>{!application.Customer__r.Name}</tr>
-                                    <br />
-                                    <tr>{!application.Customer__r.BillingStreet}</tr>
-                                    <br />
-                                    <tr>{!application.Customer__r.BillingCity}, {!application.Customer__r.BillingState}</tr>
-                                    <br />
-                                    <tr>{!application.Customer__r.BillingCountry} <span style="padding-left:10px">{!application.Customer__r.BillingPostalCode}</span></tr>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <br />
-                        Dear Sir/Madam,
-                        <br />
-                        <br />
-                        <div class="justify indent">
-                            <p>We are pleased to inform you that we have in principle, approved a LOAN as per the terms
-                                and conditions mentioned below, special conditions if any, and other conditions
-                                mentioned overleaf.</p>
-                        </div>
-                        <br />
-                            <div>Amount Approved <span style="padding-left:50px">Rs.{!application.Approved_Amount__c}</span></div>
-                        <br />
-                        <div class="justify caps">
-                            <p>THIS LOAN APPROVAL IS SUBJECT TO LEGAL AND TECHNICAL CLEARANCE AS ASSESSED BY A5E
-                                CONSULTING.</p>
-                        </div>
-                        <br />
-                        <br />
-
+                    <article class="slds-card slds-p-top_medium ArialUnicodeMSFont" style="background: #fff;">
+                        
+                        <div style='font-family: "Arial Unicode MS"; width:86%; margin:auto; font-size:14px;'>
+                            <!-- logo -->
+                            <table>
+                                <tr>
+                                    <td style="width:90%"></td>
+                                    <td>
+                                        <div style="float:right;padding-top: 20px;">
+                                            <!--<apex:image url="{!$Resource.ApplicaitonPdfLogo}" width="100" height="50" />-->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                            <div class="justify">
+                                <div>
+                                    revardo
+                                </div>
+                                1660 North Service Road East, Suite 208, Oakville, ON L6H 7L9</div>
+                            <br /><br />
+                            <!-- Appliation name and date -->
+                            
+                            <div style="clear: both;">
+                                <span style="float: left">File No: &nbsp;<strong> {!application.Name}</strong></span>
+                                <span style="float: right"><strong>{!todayDate}</strong></span>
+                            </div>
+                            <br/>
+                            
+                            
+                            <br />
+                            <!-- customer address -->
+                            <table>
+                                <tr>
+                                    <td>{!application.Customer__r.Name}</td>
+                                </tr>
+                                <tr>
+                                    <td>{!application.Customer__r.BillingStreet}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>{!application.Customer__r.BillingCity}{!application.Customer__r.BillingState}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>{!application.Customer__r.BillingCountry}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            Dear Sir/Madam,
+                       
+                            <br />
+                            <div class="justify indent">
+                                <p>We are pleased to inform you that we have in principle, approved a LOAN as per the terms
+                                    and conditions mentioned below, special conditions if any, and other conditions
+                                    mentioned overleaf.</p>
+                            </div>
+                            <br />
+                            <div>Amount Approved <span style="padding-left:50px">CAD {!application.Approved_Amount__c}</span>
+                            </div>
+                            <br />
+                            <div class="justify caps">
+                                <p>THIS LOAN APPROVAL IS SUBJECT TO LEGAL AND TECHNICAL CLEARANCE AS ASSESSED BY revardo.</p>
+                            </div>
+                            <br />
+                            <br />
+                            
                             SPECIAL CONDITIONS
-                                <ol style="list-style-type: decimal;">
-                                    <li class="custom-Li">Condition 1</li>
-                                    <li class="custom-Li">Condition 2</li>
-                                    <li class="custom-Li">Condition 3</li>
-                                    <li class="custom-Li">Condition 4</li>
-                                    <li class="custom-Li">Condition 5</li>
-                                </ol>
-                        <br />
-                        <div>We look forward to hearing from you.</div>
-                        <br/>
-                        <div>Yours faithfully,</div>
-                        <div>For A5E Consulting.</div>
-                        <br />
-                        <br />
-                        <br />
+                            <ol style="list-style-type: decimal;">
+                                <li class="custom-Li">Condition 1</li>
+                                <li class="custom-Li">Condition 2</li>
+                                <li class="custom-Li">Condition 3</li>
+                                <li class="custom-Li">Condition 4</li>
+                                <li class="custom-Li">Condition 5</li>
+                            </ol>
+                            <br />
+                            <div>We look forward to hearing from you.</div>
+                            <br />
+                            <div><i>Yours faithfully,</i></div>
+                            <br />
+                            <br />
+                            <br />
+                        </div>
+                    </article>
+                    
+                    <div class="slds-grid slds-m-around_xx-small slds-p-top_medium" style="padding-top:10px">
+                        <div class="slds-col slds-align_absolute-center" style="text-align: center;
+                                                                                margin-bottom: 10px;">
+                            <apex:commandButton style="font-family:Arial;font-size: 14px;"
+                                                styleclass="slds-button slds-button_neutral" action="{!savePOCDoc}"
+                                                value="Generate Applicaiton PDF" oncomplete="target()" status="spinner" />
+                            <input type="button" style="font-family:Arial;font-size: 14px; ont-family: Arial;
+                                                        /* font-size: 14px; */
+                                                        padding: 0.2rem;
+                                                        border-radius: 2.9px;
+                                                        line-height: 1.1rem;
+                                                        cursor: pointer;"
+                                   class="slds-button slds-button_neutral" onclick="closeWindow();" value="Cancel" />
+                        </div>
                     </div>
-
-                </article>
-                <div class="slds-grid slds-m-around_xx-small slds-p-top_medium">
-                    <div class="slds-col slds-align_absolute-center">
-                        <apex:commandButton style="font-family:Arial;font-size: 14px;"
-                            styleclass="slds-button slds-button_neutral" action="{!savePOCDoc}"
-                            value="Generate Applicaiton PDF" oncomplete="target()" status="spinner" />
-                        <input type="button" style="font-family:Arial;font-size: 14px;"
-                            class="slds-button slds-button_neutral" onclick="closeWindow();" value="Cancel" />
-                    </div>
-                </div>
-
-            </body>
-        </apex:outputPanel>
-    </apex:form>
-
+                </body>
+            </apex:outputPanel>
+        </apex:form>
+        
     </html>
 </apex:page>

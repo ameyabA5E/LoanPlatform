@@ -1,37 +1,100 @@
-<apex:page showHeader="false" sidebar="false" 
-            controller="ApplicationDecisionController" 
-            standardstylesheets="false" 
-            docType="html-5.0" applyBodyTag="false" 
-            applyHtmlTag="false">
+<apex:page showHeader="false" sidebar="false" controller="ApplicationDecisionController" standardstylesheets="false" docType="html-5.0"
+    applyBodyTag="false" applyHtmlTag="false">
     <html>
-                
-        <apex:outputPanel rendered="{!application.Decision__c == 'Approved'}">
-            <div class="fleft">
-                <div class="msgBlock">
-                    <h2>Your eligibility is for Rupees {!application.Approved_Amount__c}</h2>
-                    <h2>Your will receive an email from Lending360 to authenticate yourself</h2>
-                    <h2>Lending360 representative will contact you for further steps.</h2>
-                </div>
-            </div>
-        </apex:outputPanel>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+        <apex:stylesheet value="{!URLFOR($Resource.ApplicationResource, 'css/traction/application.css')}" />
+        <apex:includeScript value="{!$Resource.jQuery}" />
+        <apex:includeScript value="{!URLFOR($Resource.ApplicationResource, 'js/traction/application.js')}" />
+        <script type="text/javascript">
+            var topOrigin = '{!JSENCODE(AppFormSettings.Parent_Page_Domain__c)}';
+
+            $(document).ready(function () {
+                scrollToTop();
+            });
+
+            function loading(id) {
+                // Disable continue and do not continue buttons
+                $("[id*=id]").attr("disabled", "true");
+                // Show spinner
+                $("#loading").show();
+            }
+        </script>
+    </head>
+
+    <body>       
         
-        
-        <apex:outputPanel rendered="{!application.Decision__c == 'Needs Review'}">
-            <div class="fleft">
-                <div class="msgBlock">
-                    <h2>We need to further review your Application</h2>
-                    <h2>Lending360 representative will contact you to get additional information</h2>
+        <!-- End Google Tag Manager -->
+        <div id="innerContainer" class="inner-container">
+            <!--wrapArea Start-->
+            <!--Application Needs Review-->
+            <apex:outputPanel layout="block" rendered="{!applicationStatus == DECISION_ERROR }">
+                <script>
+                    <!--pushHit('/application-form/application_error', 'Application Error');-->
+                </script>
+                <div class="fleft">
+                    <h2>Thank you for your application.</h2>
+                    <h2>At this time, we are not able to make approval decision without further
+                     review.  One of our customer service representatives will follow up with you to notify you via 
+                     telephone call of the application result.  If you have any questions, please feel free to call 
+                     us at 866.262.9690.</h2>
                 </div>
-            </div>
-        </apex:outputPanel>
-        
-        <apex:outputPanel rendered="{!application.Decision__c == 'Declined'}">
-            <div class="fleft">
-                <div class="msgBlock">
-                    <h2>Sorry we will not be able to proceed with your current application.</h2>
+            </apex:outputPanel>
+            <!-- Application System approved-->
+            <apex:outputPanel layout="block" rendered="{!applicationStatus == DECISION_ACCEPTED }">
+                <script>
+                    <!--pushHit('/application-form/application_error', 'Application Error');-->
+                </script>
+                <div class="fleft">
+                    <div>
+                        <h2>
+                            Congratulations! Your application has been conditionally approved. 
+                            You will have received an email from us to to verify your information.  
+                            If you have not already done so, please click on the link provided to 
+                            complete the application.
+                        </h2>
+                        <h2>Please note that all approvals are subject to internal review reserves the right to cancel an approval for any reason it 
+                            deems appropriate.
+                        </h2>
+                        <h2>Subject to Internal review, your loan takes about 10-15 days to process.
+                            If you have any questions, please call at 866.262.9690.
+                        </h2>
+                        <h2>
+                            We look forward to welcoming you as a client.
+                        </h2>
+                    </div>
                 </div>
-            </div>
-        </apex:outputPanel>
+            </apex:outputPanel>
+            <!-- Application System Declined-->
+            <apex:outputPanel layout="block" rendered="{!applicationStatus == DECISION_DECLINED }">
+                <script>
+                    <!--pushHit('/application-form/application_error', 'Application Error');-->
+                </script>
+                <div class="fleft">
+                    <div>
+                        <h2>
+                            Thank you for your interest in becoming a customer.
+                        </h2>
+                        <h2>
+                            We have carefully considered your application and regret to inform you we were unable
+                            to issue you loan at this time.
+                        </h2>
+                        <h2>
+                            Should the information you supplied us change, we would be happy to review
+                            your new application.
+                        </h2>
+                        <h2>
+                            We thank you again for your application.                                
+                        </h2>    
+                    </div>
+
+                </div>
+            </apex:outputPanel>
             
+        </div>
+    </body>
+
     </html>
 </apex:page>

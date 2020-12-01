@@ -470,17 +470,6 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>Action__c</fields>
-        <fields>End_Point__c</fields>
-        <fields>Error__c</fields>
-        <fields>Request__c</fields>
-        <fields>Response__c</fields>
-        <relatedList>API_Error__c.Product__c</relatedList>
-        <sortField>NAME</sortField>
-        <sortOrder>Desc</sortOrder>
-    </relatedLists>
-    <relatedLists>
         <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedLists>

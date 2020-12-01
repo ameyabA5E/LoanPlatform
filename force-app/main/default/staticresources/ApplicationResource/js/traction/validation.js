@@ -224,7 +224,7 @@ function validateStepZero() {
 	$("[id*='stepZeroContinue']").attr("disabled", "true");
 
 	// Validate Loan Type
-	if (validateRadio("loanType") == false) {
+	/*if (validateRadio("loanType") == false) {
 		noErrors = false;
 	} 
 	else {		
@@ -235,7 +235,7 @@ function validateStepZero() {
 				noErrors = false;		
 			}		
 		}	
-	}
+	}*/
 	
 	//Manitoba Disclosure changes
 	// Validate Province

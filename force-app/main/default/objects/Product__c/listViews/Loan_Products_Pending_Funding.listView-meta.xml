@@ -4,16 +4,9 @@
     <columns>NAME</columns>
     <columns>Customer__c</columns>
     <columns>Disbursement_Amount__c</columns>
-    <columns>Funding_Status__c</columns>
     <columns>Loan_Process_Type__c</columns>
-    <columns>Funding_Type__c</columns>
     <columns>Funding_Date__c</columns>
     <filterScope>Everything</filterScope>
-    <filters>
-        <field>Funding_Status__c</field>
-        <operation>equals</operation>
-        <value>Pending,Funding Failed</value>
-    </filters>
     <filters>
         <field>Loan_Process_Type__c</field>
         <operation>notEqual</operation>
